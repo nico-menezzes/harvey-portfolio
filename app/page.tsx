@@ -8,7 +8,7 @@ export default function Home() {
             Welcome to
           </p>
           <h1 className="mb-4 font-[family-name:var(--font-display)] text-4xl font-bold tracking-tight text-red-600 sm:text-5xl">
-            Ship Studio
+            Harvey Portfolio<br />
           </h1>
           <p className="text-lg text-[var(--muted)]">
             How professionals build with AI. Just describe what you want.
