@@ -7,7 +7,7 @@ export default function Home() {
           <p className="mb-3 text-sm font-medium uppercase tracking-wider text-[var(--muted)]">
             Welcome to
           </p>
-          <h1 className="mb-4 font-[family-name:var(--font-display)] text-4xl font-bold tracking-tight text-[var(--foreground)] sm:text-5xl">
+          <h1 className="mb-4 font-[family-name:var(--font-display)] text-4xl font-bold tracking-tight text-red-600 sm:text-5xl">
             Ship Studio
           </h1>
           <p className="text-lg text-[var(--muted)]">
