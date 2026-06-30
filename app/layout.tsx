@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, DM_Sans } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AgentationProvider } from "@/components/AgentationProvider";
 
-const spaceGrotesk = Space_Grotesk({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-display",
+  variable: "--font-inter",
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-geist-mono",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Ship Studio",
-  description: "How professionals build with AI. No coding required.",
+  title: "Harvey Specter — H.Studio",
+  description:
+    "H.Studio is a full-service creative studio creating beautiful digital experiences and products — branding, web design and engineering.",
 };
 
 export default function RootLayout({
@@ -26,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${dmSans.variable}`}>
-      <body className="font-[family-name:var(--font-body)] antialiased">
+    <html lang="en" className={`${inter.variable} ${geistMono.variable}`}>
+      <body className="bg-background font-sans text-foreground antialiased">
         {children}
         <AgentationProvider />
       </body>

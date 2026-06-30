@@ -1,31 +1,135 @@
 @import "tailwindcss";
 
+/* ============================================================
+   DESIGN TOKENS
+   Single source of truth for colors, type and spacing.
+   New pages/sections should reuse these — never hardcode hex.
+   ============================================================ */
 :root {
-  --background: #fafaf9;
-  --foreground: #1c1917;
-  --muted: #78716c;
-  --accent: #dc2626;
+  /* — Color primitives — */
+  --c-black: #000000;
+  --c-white: #ffffff;
+  --c-ink: #1f1f1f;        /* near-black, used for body copy */
+  --c-paper: #f2f2f0;      /* warm off-white page background */
+
+  /* — Semantic colors — */
+  --background: var(--c-paper);
+  --foreground: var(--c-black);
+  --muted: var(--c-ink);
+  --on-dark: var(--c-white);   /* text/elements sitting on imagery or dark */
+  --accent: var(--c-black);    /* buttons / primary actions */
+
+  /* — Layout — */
+  --gutter: 1rem;              /* page side padding (mobile) */
+  --maxw: 1440px;              /* max content width */
+
+  /* — Type scale — */
+  --text-label: 0.875rem;                       /* 14px — mono bracket labels */
+  --text-body: 0.875rem;                        /* 14px — hero paragraph */
+  --text-hero: clamp(4rem, 14vw, 12.375rem);    /* 64 → 198px display name */
+  --tracking-hero: -0.07em;
+  --tracking-tight: -0.04em;
+
+  /* — Hero — */
+  --hero-blur-height: 42svh;   /* height of the bottom progressive blur band */
 }
 
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 2rem;            /* 32px desktop gutter */
+  }
+}
+
+/* Expose tokens to Tailwind utilities (text-foreground, bg-accent, font-mono…) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
+  --color-ink: var(--c-ink);
+  --color-paper: var(--c-paper);
+  --color-on-dark: var(--on-dark);
   --color-accent: var(--accent);
-  --font-sans: var(--font-body);
-  --font-display: var(--font-display);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #fafaf9;
-    --muted: #a8a29e;
-    --accent: #f87171;
-  }
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* ============================================================
+   PROGRESSIVE BLUR (pure CSS)
+   Stacked backdrop-filter layers, each with a gradient mask
+   shifted further down — so the blur ramps up toward the
+   bottom edge instead of being a flat, uniform blur.
+   Usage: <div class="progressive-blur"> + 6 empty <div> layers.
+   ============================================================ */
+@layer utilities {
+  .progressive-blur {
+    pointer-events: none;
+    /* Position/size (absolute, bottom-0, height…) come from the wrapper's
+       Tailwind utilities so there's no ambiguity about where it anchors. */
+  }
+  /* Each layer = a masked parent wrapping a blurred child. Keeping the mask
+     and the backdrop-filter on SEPARATE elements avoids a cross-browser bug
+     where masking a backdrop-filtered element drops the blur entirely. */
+  .progressive-blur > div,
+  .progressive-blur > div > div {
+    position: absolute;
+    inset: 0;
+  }
+  .progressive-blur > div > div {
+    will-change: backdrop-filter;
+  }
+
+  .progressive-blur > div:nth-child(1) {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12.5%, #000 25%, transparent 37.5%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 12.5%, #000 25%, transparent 37.5%);
+  }
+  .progressive-blur > div:nth-child(1) > div {
+    -webkit-backdrop-filter: blur(0.5px);
+            backdrop-filter: blur(0.5px);
+  }
+  .progressive-blur > div:nth-child(2) {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 12.5%, #000 25%, #000 37.5%, transparent 50%);
+            mask-image: linear-gradient(to bottom, transparent 12.5%, #000 25%, #000 37.5%, transparent 50%);
+  }
+  .progressive-blur > div:nth-child(2) > div {
+    -webkit-backdrop-filter: blur(1px);
+            backdrop-filter: blur(1px);
+  }
+  .progressive-blur > div:nth-child(3) {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 25%, #000 37.5%, #000 50%, transparent 62.5%);
+            mask-image: linear-gradient(to bottom, transparent 25%, #000 37.5%, #000 50%, transparent 62.5%);
+  }
+  .progressive-blur > div:nth-child(3) > div {
+    -webkit-backdrop-filter: blur(2px);
+            backdrop-filter: blur(2px);
+  }
+  .progressive-blur > div:nth-child(4) {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 37.5%, #000 50%, #000 62.5%, transparent 75%);
+            mask-image: linear-gradient(to bottom, transparent 37.5%, #000 50%, #000 62.5%, transparent 75%);
+  }
+  .progressive-blur > div:nth-child(4) > div {
+    -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+  }
+  .progressive-blur > div:nth-child(5) {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 50%, #000 62.5%, #000 75%, transparent 87.5%);
+            mask-image: linear-gradient(to bottom, transparent 50%, #000 62.5%, #000 75%, transparent 87.5%);
+  }
+  .progressive-blur > div:nth-child(5) > div {
+    -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+  }
+  .progressive-blur > div:nth-child(6) {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 62.5%, #000 75%, #000 100%);
+            mask-image: linear-gradient(to bottom, transparent 62.5%, #000 75%, #000 100%);
+  }
+  .progressive-blur > div:nth-child(6) > div {
+    -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+  }
 }
