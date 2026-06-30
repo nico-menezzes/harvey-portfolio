@@ -19,6 +19,13 @@ export function Hero() {
         className="object-cover object-center"
       />
 
+      {/* Bottom fade-out: a dark gradient so the hero dissolves into its base
+          (and the white copy/CTA stay readable) regardless of blur support. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[var(--hero-blur-height)] bg-gradient-to-t from-black/60 via-black/25 to-transparent"
+      />
+
       {/* Progressive blur band fading in toward the bottom edge */}
       <ProgressiveBlur className="absolute inset-x-0 bottom-0 h-[var(--hero-blur-height)]" />
 

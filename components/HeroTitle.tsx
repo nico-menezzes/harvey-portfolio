@@ -49,7 +49,7 @@ export function HeroTitle({ text }: { text: string }) {
       </span>
 
       <h1
-        className="text-center text-[18vw] font-medium capitalize leading-[0.85] tracking-[var(--tracking-hero)] text-white lg:whitespace-nowrap lg:text-left lg:text-[calc((100vw_-_2*var(--gutter))/6.5)] lg:leading-[0.85]"
+        className="text-center text-[18vw] font-medium capitalize leading-[0.85] tracking-[var(--tracking-hero)] text-white mix-blend-overlay lg:whitespace-nowrap lg:text-left lg:text-[calc((100vw_-_2*var(--gutter))/6.5)] lg:leading-[0.85]"
         style={fontSize ? { fontSize } : undefined}
       >
         {text}

@@ -2,5 +2,10 @@
   "enabledMcpjsonServers": [
     "playwright",
     "sanity"
-  ]
+  ],
+  "skillOverrides": {
+    "animations": "name-only",
+    "brand-identity": "name-only",
+    "frontend-design": "name-only"
+  }
 }
