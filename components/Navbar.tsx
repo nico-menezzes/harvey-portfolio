@@ -88,11 +88,13 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile menu overlay — full-screen, solid background, slides down */}
+      {/* Mobile menu overlay — full-screen, solid background. Slides down on
+          open and back up on close with a symmetric easing; the links stagger
+          in on open and reverse-stagger out on close. */}
       <div
         id="mobile-menu"
         aria-hidden={!menuOpen}
-        className={`fixed inset-0 z-40 bg-paper px-[var(--gutter)] pt-28 transition-[transform,opacity] duration-300 ease-out lg:hidden ${
+        className={`fixed inset-0 z-40 bg-paper px-[var(--gutter)] pt-28 transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] lg:hidden ${
           menuOpen
             ? "translate-y-0 opacity-100"
             : "pointer-events-none -translate-y-full opacity-0"
@@ -102,10 +104,14 @@ export function Navbar() {
           {NAV_LINKS.map((link, i) => (
             <li
               key={link.href}
-              className={`border-b border-foreground/10 transition-[transform,opacity] duration-500 ${
-                menuOpen ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+              className={`border-b border-foreground/10 transition-[transform,opacity] duration-[400ms] ease-out ${
+                menuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
               }`}
-              style={{ transitionDelay: menuOpen ? `${100 + i * 60}ms` : "0ms" }}
+              style={{
+                transitionDelay: menuOpen
+                  ? `${150 + i * 55}ms`
+                  : `${(NAV_LINKS.length - 1 - i) * 45}ms`,
+              }}
             >
               <a
                 href={link.href}

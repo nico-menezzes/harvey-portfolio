@@ -12,15 +12,17 @@
 - **Fonts:**
   - `Inter` — all headings and text
   - `Geist Mono` — the bracket labels like `[ Hello i'm ]`
+  - `Playfair Display` (italic) — the decorative serif "&" in big statements
 
 ## Pages
-- **Homepage** (`/`) — currently shows the **Hero** section only. More sections coming (About, Services, Projects, News, Contact).
+- **Homepage** (`/`) — shows the **Hero**, then the **Creative Statement** section. More sections coming (About, Services, Projects, News, Contact).
 
 ## Components
 - **Navbar** (`components/Navbar.tsx`) — top navigation. On desktop: logo, links (About, Services, Projects, News, Contact) and a "Let's talk" button. On mobile: logo + a hamburger that opens a menu. Built with proper HTML tags (`<header>`, `<nav>`, `<ul>`, `<a>`, `<button>`).
 - **Hero** (`components/Hero.tsx`) — full-screen opening with the big "Harvey Specter" name over a background photo, an intro paragraph and a "Let's talk" button. Has a progressive blur fading in at the bottom.
 - **Button** (`components/ui/Button.tsx`) — the reusable black pill button used for every "Let's talk".
 - **ProgressiveBlur** (`components/ProgressiveBlur.tsx`) — reusable CSS-only blur that gets stronger toward the bottom edge.
+- **CreativeStatement** (`components/CreativeStatement.tsx`) — the big editorial "A creative director / Photographer / Born & raised on the south side of chicago." statement. Staggered/indented on desktop, centered on mobile, with a fade-up reveal when scrolled into view.
 
 ## Design System (for future sections)
 All styling uses Tailwind + variables in `app/globals.css`, so new pages stay consistent:

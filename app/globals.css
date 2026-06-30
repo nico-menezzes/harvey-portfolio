@@ -27,7 +27,9 @@
   --text-label: 0.875rem;                       /* 14px — mono bracket labels */
   --text-body: 0.875rem;                        /* 14px — hero paragraph */
   --text-hero: clamp(4rem, 14vw, 12.375rem);    /* 64 → 198px display name */
+  --text-statement: clamp(2rem, 6.7vw, 96px);   /* 32 → 96px editorial statement */
   --tracking-hero: -0.07em;
+  --tracking-statement: -0.08em;
   --tracking-tight: -0.04em;
 
   /* — Hero — */
@@ -52,6 +54,7 @@
 
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-playfair);
 }
 
 body {
