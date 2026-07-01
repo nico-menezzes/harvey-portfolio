@@ -15,12 +15,13 @@
   - `Playfair Display` (italic) — the decorative serif "&" in big statements
 
 ## Pages
-- **Homepage** (`/`) — shows the **Hero**, the **Creative Statement**, the **About** section, the full-bleed **Photo Banner**, the dark **Services** section, **Selected Work**, **Testimonials**, then **News**. More sections coming (Contact).
+- **Homepage** (`/`) — the full page, in order: **Hero → Creative Statement → About → Photo Banner → Services → Selected Work → Testimonials → News → Footer**. (Complete.)
 
 ## Editable content (CMS-ready)
 - `lib/content.ts` is the single place that holds the content for the **Services**, **Selected Work**, **Testimonials** and **News** sections — the types (`ServiceItem`, `WorkItem`, `TestimonialItem`, `NewsItem`) plus placeholder data (`PLACEHOLDER_SERVICES`, `PLACEHOLDER_WORKS`, `PLACEHOLDER_TESTIMONIALS`, `PLACEHOLDER_NEWS`). Each section accepts its data through an `items` prop, so hooking up a CMS later means: fetch → map to those types → pass into the section (`<News items={…} />`, etc.). No component changes needed. Image/logo fields are plain URL/path strings so a CMS can supply remote images. (News is meant to be capped at 5 items in the CMS.)
 
 ## Components
+- **Footer** (`components/Footer.tsx`) — black footer with a "Have a project in mind?" CTA + outlined "Let's talk" button, social links (two aligned columns on desktop, stacked on mobile), a divider, legal links, and a giant "H.Studio" wordmark that bleeds off the bottom edge with a vertical "Coded By Claude" credit. Has `id="contact"`, so the navbar's Contact link scrolls here. Social/legal hrefs are placeholders (`#`) to fill in later.
 - **SmoothScroll** (`components/SmoothScroll.tsx`) — wraps the whole page in GSAP **ScrollSmoother** so scrolling glides with a smooth, eased feel (desktop wheel/trackpad only; touch devices keep native scrolling; off for "reduce motion"). In-page anchor links (About, Services…) are intercepted so they scroll smoothly to their section.
 - **Navbar** (`components/Navbar.tsx`) — top navigation. On desktop: logo, links (About, Services, Projects, News, Contact) and a "Let's talk" button. On mobile: logo + a hamburger that opens a menu. Built with proper HTML tags (`<header>`, `<nav>`, `<ul>`, `<a>`, `<button>`).
 - **Hero** (`components/Hero.tsx`) — full-screen opening with the big "Harvey Specter" name over a background photo, an intro paragraph and a "Let's talk" button. Has a progressive blur fading in at the bottom.
@@ -42,6 +43,7 @@ All styling uses Tailwind + variables in `app/globals.css`, so new pages stay co
 - Labels: `font-mono text-[length:var(--text-label)]`
 
 ## Recent Changes
+- 2026-07-01: Built the **Footer** from Figma (CTA, social/legal links, giant bleeding "H.Studio" wordmark, "Coded By Claude" credit) and wired it as the `#contact` anchor. Homepage is now complete end-to-end.
 - 2026-07-01: Built the **News** section from Figma — desktop pins and scrolls the cards horizontally with the page scroll (GSAP ScrollTrigger pin + scrub), mobile is a Swiper carousel. CMS-ready via `items` / `PLACEHOLDER_NEWS` (cap 5).
 - 2026-07-01: Testimonials desktop heading now uses the Hero's fit-to-width logic (measures the word and scales the font to span the full stage width, via ResizeObserver) instead of a capped size.
 - 2026-07-01: Built the **Testimonials** section from Figma — draggable scattered cards on desktop (GSAP Draggable + inertia, with the correct behind/in-front z-index against the big wordmark) and a Swiper slider on mobile. CMS-ready via `items` / `PLACEHOLDER_TESTIMONIALS`. Added `swiper` dependency.
