@@ -87,23 +87,23 @@ export function About() {
       tl.from("[data-reveal]", {
         opacity: 0,
         y: 26,
-        duration: 1.1,
+        duration: 0.6,
         ease: "power3.out",
-        stagger: 0.16,
+        stagger: 0.09,
       })
         .from(
           "[data-corner]",
-          { opacity: 0, scale: 0.4, duration: 0.9, ease: "power3.out", stagger: 0.08 },
-          "-=0.8",
+          { opacity: 0, scale: 0.4, duration: 0.5, ease: "power3.out", stagger: 0.05 },
+          "-=0.45",
         )
         .from(
           "[data-img]",
-          { clipPath: "inset(0 0 100% 0)", duration: 1.5, ease: "power3.inOut" },
-          "-=1",
+          { clipPath: "inset(0 0 100% 0)", duration: 0.85, ease: "power3.inOut" },
+          "-=0.55",
         )
         .from(
           "[data-img] img",
-          { scale: 1.14, duration: 1.8, ease: "power3.out" },
+          { scale: 1.14, duration: 1, ease: "power3.out" },
           "<",
         );
     }, el);

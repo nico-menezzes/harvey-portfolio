@@ -46,7 +46,7 @@ export function CreativeStatement() {
         tl.from(rule, {
           scaleX: 0,
           transformOrigin: "right center",
-          duration: 1.8,
+          duration: 0.9,
           ease: "power3.out",
         });
       }
@@ -56,11 +56,11 @@ export function CreativeStatement() {
         {
           opacity: 0,
           y: 28,
-          duration: 2,
+          duration: 0.9,
           ease: "power3.out",
-          stagger: 0.22,
+          stagger: 0.1,
         },
-        rule ? "-=1.4" : 0,
+        rule ? "-=0.7" : 0,
       );
     }, el);
 
