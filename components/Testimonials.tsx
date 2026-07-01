@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { InertiaPlugin } from "gsap/InertiaPlugin";
@@ -24,6 +24,8 @@ const POSITIONS = [
 
 const headingClass =
   "font-medium capitalize leading-[1.1] tracking-[var(--tracking-hero)] text-foreground";
+
+const BASE_PX = 200; // size used to measure the heading's natural width
 
 function TestimonialCard({ item }: { item: TestimonialItem }) {
   return (
@@ -55,6 +57,30 @@ function TestimonialCard({ item }: { item: TestimonialItem }) {
  */
 export function Testimonials({ items = PLACEHOLDER_TESTIMONIALS }: { items?: TestimonialItem[] }) {
   const stage = useRef<HTMLDivElement>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [headingSize, setHeadingSize] = useState<number>();
+
+  // Fit-to-width heading (same logic as the Hero H1): measure the word at a
+  // fixed size, then scale the font so it spans the full stage width.
+  useEffect(() => {
+    const stageEl = stage.current;
+    const measure = measureRef.current;
+    if (!stageEl || !measure) return;
+
+    const fit = () => {
+      if (!window.matchMedia("(min-width: 1024px)").matches) {
+        setHeadingSize(undefined);
+        return;
+      }
+      const natural = measure.getBoundingClientRect().width;
+      if (natural) setHeadingSize((stageEl.clientWidth / natural) * BASE_PX);
+    };
+
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(stageEl);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const el = stage.current;
@@ -91,8 +117,18 @@ export function Testimonials({ items = PLACEHOLDER_TESTIMONIALS }: { items?: Tes
         ref={stage}
         className="relative mx-auto hidden aspect-[1440/860] w-full max-w-[1440px] lg:block"
       >
+        {/* Off-screen measurer: same font/tracking, fixed size, single line */}
+        <span
+          ref={measureRef}
+          aria-hidden
+          className={`pointer-events-none invisible absolute left-0 top-0 whitespace-nowrap ${headingClass}`}
+          style={{ fontSize: BASE_PX }}
+        >
+          Testimonials
+        </span>
         <h2
-          className={`pointer-events-none absolute left-1/2 top-1/2 z-10 w-full -translate-x-1/2 -translate-y-1/2 text-center text-[length:var(--text-hero)] ${headingClass}`}
+          className={`pointer-events-none absolute left-1/2 top-1/2 z-10 w-full -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-center text-[length:var(--text-hero)] ${headingClass}`}
+          style={headingSize ? { fontSize: headingSize } : undefined}
         >
           Testimonials
         </h2>

@@ -41,6 +41,7 @@ All styling uses Tailwind + variables in `app/globals.css`, so new pages stay co
 - Labels: `font-mono text-[length:var(--text-label)]`
 
 ## Recent Changes
+- 2026-07-01: Testimonials desktop heading now uses the Hero's fit-to-width logic (measures the word and scales the font to span the full stage width, via ResizeObserver) instead of a capped size.
 - 2026-07-01: Built the **Testimonials** section from Figma — draggable scattered cards on desktop (GSAP Draggable + inertia, with the correct behind/in-front z-index against the big wordmark) and a Swiper slider on mobile. CMS-ready via `items` / `PLACEHOLDER_TESTIMONIALS`. Added `swiper` dependency.
 - 2026-07-01: Tuned **Selected Work** — shorter card images (aspect-ratio driven instead of fixed height, so it's responsive at every width), more top/side breathing room, a responsive column offset (`clamp`), and extra space before the CTA.
 - 2026-07-01: Built the **Selected Work** (004) section from Figma — staggered two-column masonry on desktop, single column on mobile, framed CTA, hover lift/zoom + scroll reveal (GSAP). Made both **Works** and **Services** CMS-ready by moving their content into `lib/content.ts` (typed placeholder data) and having the components accept an `items` prop.
