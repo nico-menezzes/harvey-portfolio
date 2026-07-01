@@ -99,23 +99,24 @@ export function News({ items = PLACEHOLDER_NEWS }: { items?: NewsItem[] }) {
 
   return (
     <section id="news" className="bg-[#f3f3f3]">
-      {/* Desktop: pinned horizontal scroll. The heading stays anchored on the
-          left (z-0) while the cards slide over it (z-10). */}
-      <div ref={pin} className="relative hidden h-screen overflow-hidden lg:block">
-        {/* Vertical heading — fixed in place, behind the cards */}
-        <div className="absolute left-[var(--gutter)] top-1/2 z-0 flex h-[706px] w-[110px] -translate-y-1/2 items-center justify-center">
-          <h2 className="-rotate-90 whitespace-nowrap text-[64px] font-light uppercase leading-[0.86] tracking-[var(--tracking-statement)] text-black">
-            {HEADING_LINE_1}
-            <br />
-            {HEADING_LINE_2}
-          </h2>
-        </div>
-
-        {/* Cards track — slides horizontally, passing over the heading */}
+      {/* Desktop: pinned horizontal scroll */}
+      <div
+        ref={pin}
+        className="hidden h-screen items-center overflow-hidden lg:flex"
+      >
         <div
           ref={track}
-          className="absolute inset-y-0 left-0 z-10 flex items-center gap-8 pl-[300px] pr-[var(--gutter)] will-change-transform"
+          className="flex h-full items-center gap-8 px-[var(--gutter)] will-change-transform"
         >
+          {/* Vertical heading */}
+          <div className="flex h-[706px] w-[110px] shrink-0 items-center justify-center">
+            <h2 className="-rotate-90 whitespace-nowrap text-[64px] font-light uppercase leading-[0.86] tracking-[var(--tracking-statement)] text-black">
+              {HEADING_LINE_1}
+              <br />
+              {HEADING_LINE_2}
+            </h2>
+          </div>
+
           {items.map((item, i) => (
             <Fragment key={i}>
               {i > 0 && (
