@@ -109,7 +109,7 @@ export function News({ items = PLACEHOLDER_NEWS }: { items?: NewsItem[] }) {
           className="flex h-full items-center gap-8 px-[var(--gutter)] will-change-transform"
         >
           {/* Vertical heading */}
-          <div className="flex h-[706px] w-[110px] shrink-0 items-center justify-center">
+          <div className="mr-[200px] flex h-[706px] w-[110px] shrink-0 items-center justify-center">
             <h2 className="-rotate-90 whitespace-nowrap text-[64px] font-light uppercase leading-[0.86] tracking-[var(--tracking-statement)] text-black">
               {HEADING_LINE_1}
               <br />
