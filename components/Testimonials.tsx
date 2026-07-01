@@ -36,7 +36,7 @@ function TestimonialCard({ item }: { item: TestimonialItem }) {
           src={item.logo}
           alt=""
           draggable={false}
-          className="h-[22px] w-auto object-contain"
+          className="h-[22px] w-auto max-w-[160px] self-start object-contain object-left"
         />
       )}
       <blockquote className="text-[18px] leading-[1.3] tracking-[var(--tracking-tight)] text-muted">

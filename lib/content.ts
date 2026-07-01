@@ -17,6 +17,13 @@ export type ServiceItem = {
   image: string;
 };
 
+export type NewsItem = {
+  image: string;
+  excerpt: string;
+  /** Link to the full article. */
+  href?: string;
+};
+
 export type TestimonialItem = {
   quote: string;
   author: string;
@@ -43,6 +50,19 @@ export const PLACEHOLDER_SERVICES: ServiceItem[] = [
   { title: "Web design & Dev", description: SERVICE_DESCRIPTION, image: "/service-2.png" },
   { title: "Marketing", description: SERVICE_DESCRIPTION, image: "/service-3.png" },
   { title: "Photography", description: SERVICE_DESCRIPTION, image: "/service-4.png" },
+];
+
+// News / blog posts. Capped at 5 in the CMS later; the section renders however
+// many it receives.
+const NEWS_EXCERPT =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+export const PLACEHOLDER_NEWS: NewsItem[] = [
+  { image: "/news-1.png", excerpt: NEWS_EXCERPT, href: "#" },
+  { image: "/news-2.png", excerpt: NEWS_EXCERPT, href: "#" },
+  { image: "/news-3.png", excerpt: NEWS_EXCERPT, href: "#" },
+  { image: "/news-1.png", excerpt: NEWS_EXCERPT, href: "#" },
+  { image: "/news-2.png", excerpt: NEWS_EXCERPT, href: "#" },
 ];
 
 // Order matters: the Testimonials section maps each item to a preset scatter
