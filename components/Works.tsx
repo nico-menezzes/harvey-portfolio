@@ -34,8 +34,8 @@ function WorkCard({ item }: { item: WorkItem }) {
       className="group flex w-full flex-col gap-[10px]"
     >
       <div
-        className="relative h-[390px] w-full overflow-hidden lg:h-auto"
-        style={{ aspectRatio: item.ratio ?? "5 / 6" }}
+        className="relative w-full overflow-hidden"
+        style={{ aspectRatio: item.ratio ?? "4 / 3" }}
       >
         <Image
           src={item.image}
@@ -70,7 +70,7 @@ function WorkCard({ item }: { item: WorkItem }) {
 function CtaCard() {
   const corner = "pointer-events-none absolute h-4 w-4 border-muted";
   return (
-    <div data-reveal className="relative w-full lg:w-[465px]">
+    <div data-reveal className="relative mt-6 w-full lg:mt-12 lg:w-[465px]">
       <span aria-hidden className={`${corner} left-0 top-0 border-l border-t`} />
       <span aria-hidden className={`${corner} right-0 top-0 border-r border-t`} />
       <span aria-hidden className={`${corner} bottom-0 left-0 border-b border-l`} />
@@ -124,7 +124,7 @@ export function Works({ items = PLACEHOLDER_WORKS }: { items?: WorkItem[] }) {
     <section
       id="projects"
       ref={ref}
-      className="bg-paper px-[var(--gutter)] py-12 lg:py-20"
+      className="bg-paper px-6 pb-16 pt-20 sm:px-8 lg:px-12 lg:pb-24 lg:pt-32"
     >
       {/* Header */}
       <header className="mb-8 flex flex-col gap-4 lg:mb-[61px] lg:gap-0">
@@ -144,22 +144,22 @@ export function Works({ items = PLACEHOLDER_WORKS }: { items?: WorkItem[] }) {
       </header>
 
       {/* Mobile: single column */}
-      <div className="flex flex-col gap-6 lg:hidden">
+      <div className="flex flex-col gap-10 lg:hidden">
         {items.map((item) => (
           <WorkCard key={item.title} item={item} />
         ))}
         <CtaCard />
       </div>
 
-      {/* Desktop: staggered two-column masonry */}
-      <div className="hidden items-end gap-6 lg:flex">
-        <div className="flex flex-1 flex-col gap-[61px]">
+      {/* Desktop: staggered two-column masonry (right column offset down) */}
+      <div className="hidden items-end gap-8 lg:flex xl:gap-12">
+        <div className="flex flex-1 flex-col gap-16">
           {leftColumn.map((item) => (
             <WorkCard key={item.title} item={item} />
           ))}
           <CtaCard />
         </div>
-        <div className="flex flex-1 flex-col gap-[117px] pt-[240px]">
+        <div className="flex flex-1 flex-col gap-16 pt-[clamp(96px,12vw,200px)]">
           {rightColumn.map((item) => (
             <WorkCard key={item.title} item={item} />
           ))}

@@ -40,6 +40,7 @@ All styling uses Tailwind + variables in `app/globals.css`, so new pages stay co
 - Labels: `font-mono text-[length:var(--text-label)]`
 
 ## Recent Changes
+- 2026-07-01: Tuned **Selected Work** — shorter card images (aspect-ratio driven instead of fixed height, so it's responsive at every width), more top/side breathing room, a responsive column offset (`clamp`), and extra space before the CTA.
 - 2026-07-01: Built the **Selected Work** (004) section from Figma — staggered two-column masonry on desktop, single column on mobile, framed CTA, hover lift/zoom + scroll reveal (GSAP). Made both **Works** and **Services** CMS-ready by moving their content into `lib/content.ts` (typed placeholder data) and having the components accept an `items` prop.
 - 2026-07-01: Added site-wide **GSAP ScrollSmoother** smooth scrolling (`components/SmoothScroll.tsx`, wired in `app/layout.tsx`). Anchor links scroll smoothly; navbar stays in flow; touch + reduce-motion fall back to native scroll.
 - 2026-07-01: Built the dark **Services** section (`[4] Deliverables`) from Figma — data-driven list of 4 services (title + description + thumbnail), side-by-side on desktop, stacked on mobile, with a GSAP fade-up per row. Reuses the design tokens (statement type scale, label/body sizes, tracking) to keep classes lean.
