@@ -18,6 +18,7 @@
 - **Homepage** (`/`) — shows the **Hero**, the **Creative Statement**, the **About** section, the full-bleed **Photo Banner**, then the dark **Services** section. More sections coming (Projects, News, Contact).
 
 ## Components
+- **SmoothScroll** (`components/SmoothScroll.tsx`) — wraps the whole page in GSAP **ScrollSmoother** so scrolling glides with a smooth, eased feel (desktop wheel/trackpad only; touch devices keep native scrolling; off for "reduce motion"). In-page anchor links (About, Services…) are intercepted so they scroll smoothly to their section.
 - **Navbar** (`components/Navbar.tsx`) — top navigation. On desktop: logo, links (About, Services, Projects, News, Contact) and a "Let's talk" button. On mobile: logo + a hamburger that opens a menu. Built with proper HTML tags (`<header>`, `<nav>`, `<ul>`, `<a>`, `<button>`).
 - **Hero** (`components/Hero.tsx`) — full-screen opening with the big "Harvey Specter" name over a background photo, an intro paragraph and a "Let's talk" button. Has a progressive blur fading in at the bottom.
 - **Button** (`components/ui/Button.tsx`) — the reusable black pill button used for every "Let's talk".
@@ -35,6 +36,7 @@ All styling uses Tailwind + variables in `app/globals.css`, so new pages stay co
 - Labels: `font-mono text-[length:var(--text-label)]`
 
 ## Recent Changes
+- 2026-07-01: Added site-wide **GSAP ScrollSmoother** smooth scrolling (`components/SmoothScroll.tsx`, wired in `app/layout.tsx`). Anchor links scroll smoothly; navbar stays in flow; touch + reduce-motion fall back to native scroll.
 - 2026-07-01: Built the dark **Services** section (`[4] Deliverables`) from Figma — data-driven list of 4 services (title + description + thumbnail), side-by-side on desktop, stacked on mobile, with a GSAP fade-up per row. Reuses the design tokens (statement type scale, label/body sizes, tracking) to keep classes lean.
 - 2026-07-01: Added the full-bleed **Photo Banner** section with a **GSAP scroll parallax** (the photo drifts vertically as you scroll past). Same photo is used for desktop and mobile, re-cropped per screen.
 - 2026-07-01: Built the **About** section (`002`) from Figma — corner-framed intro paragraph + tall B&W portrait, side-by-side on desktop and stacked on mobile, with a GSAP scroll reveal (text fade-up, corner ticks, portrait wipe + zoom).

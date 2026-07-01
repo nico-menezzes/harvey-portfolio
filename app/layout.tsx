@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { AgentationProvider } from "@/components/AgentationProvider";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,7 +42,7 @@ export default function RootLayout({
       className={`${inter.variable} ${geistMono.variable} ${playfair.variable}`}
     >
       <body className="bg-background font-sans text-foreground antialiased">
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
         <AgentationProvider />
       </body>
     </html>
