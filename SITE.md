@@ -15,7 +15,10 @@
   - `Playfair Display` (italic) — the decorative serif "&" in big statements
 
 ## Pages
-- **Homepage** (`/`) — shows the **Hero**, the **Creative Statement**, the **About** section, the full-bleed **Photo Banner**, then the dark **Services** section. More sections coming (Projects, News, Contact).
+- **Homepage** (`/`) — shows the **Hero**, the **Creative Statement**, the **About** section, the full-bleed **Photo Banner**, the dark **Services** section, then **Selected Work**. More sections coming (News, Contact).
+
+## Editable content (CMS-ready)
+- `lib/content.ts` is the single place that holds the content for the **Services** and **Selected Work** sections — the types (`ServiceItem`, `WorkItem`) plus placeholder data (`PLACEHOLDER_SERVICES`, `PLACEHOLDER_WORKS`). Both sections already accept their data through an `items` prop, so hooking up a CMS later means: fetch → map to those types → pass into `<Services items={…} />` / `<Works items={…} />`. No component changes needed. Image fields are plain URL/path strings so a CMS can supply remote images.
 
 ## Components
 - **SmoothScroll** (`components/SmoothScroll.tsx`) — wraps the whole page in GSAP **ScrollSmoother** so scrolling glides with a smooth, eased feel (desktop wheel/trackpad only; touch devices keep native scrolling; off for "reduce motion"). In-page anchor links (About, Services…) are intercepted so they scroll smoothly to their section.
@@ -24,7 +27,8 @@
 - **Button** (`components/ui/Button.tsx`) — the reusable black pill button used for every "Let's talk".
 - **ProgressiveBlur** (`components/ProgressiveBlur.tsx`) — reusable CSS-only blur that gets stronger toward the bottom edge.
 - **CreativeStatement** (`components/CreativeStatement.tsx`) — the big editorial "A creative director / Photographer / Born & raised on the south side of chicago." statement. Staggered/indented on desktop, centered on mobile, with a fade-up reveal when scrolled into view.
-- **Services** (`components/Services.tsx`) — the dark "Services / [4] Deliverables" section. Driven by a `SERVICES` array (title + description + thumbnail), so adding/editing a service is just editing that list. Each row: an index `[ n ]` + divider line, then an italic title with a description and a 151px square thumbnail (side-by-side on desktop, stacked on mobile). Rows fade up on scroll (GSAP). Descriptions are placeholders in `DESCRIPTION`; thumbnails live at `public/service-1..4.png`.
+- **Works** (`components/Works.tsx`) — the "Selected Work" (004) portfolio section: a staggered two-column masonry on desktop, single column on mobile, closed by a corner-framed "Let's talk" CTA. Each card has an image with glass tags, a title and a ↗ arrow; cards lift/zoom on hover and reveal on scroll (GSAP). CMS-ready — takes an `items` prop (see `lib/content.ts`).
+- **Services** (`components/Services.tsx`) — the dark "Services / [4] Deliverables" section. CMS-ready: takes an `items` prop (defaults to the placeholder list in `lib/content.ts`); the "[4]" count is derived from the number of items. Each row: an index `[ n ]` + divider line, then an italic title with a description and a 151px square thumbnail (side-by-side on desktop, stacked on mobile). Rows fade up on scroll (GSAP). Descriptions are placeholders in `DESCRIPTION`; thumbnails live at `public/service-1..4.png`.
 - **PhotoBanner** (`components/PhotoBanner.tsx`) — a full-width (edge-to-edge) photograph of Harvey shooting with a camera. The image is oversized and clipped by the frame, and drifts vertically on scroll for a **GSAP parallax** effect (turns off for "reduce motion"). Photo lives at `public/photographer.png`.
 - **About** (`components/About.tsx`) — the "002 / About" section: an intro paragraph framed by small corner ticks, paired with a tall black & white portrait. On desktop the label sits top-left, the framed paragraph is bottom-aligned with the portrait, and "002" pins to the portrait's top; on mobile everything stacks. Reveals on scroll with GSAP: text fades up, corner ticks pop in, and the portrait wipes open top-to-bottom with a slow zoom. Portrait lives at `public/about-portrait.png`.
 
@@ -36,6 +40,7 @@ All styling uses Tailwind + variables in `app/globals.css`, so new pages stay co
 - Labels: `font-mono text-[length:var(--text-label)]`
 
 ## Recent Changes
+- 2026-07-01: Built the **Selected Work** (004) section from Figma — staggered two-column masonry on desktop, single column on mobile, framed CTA, hover lift/zoom + scroll reveal (GSAP). Made both **Works** and **Services** CMS-ready by moving their content into `lib/content.ts` (typed placeholder data) and having the components accept an `items` prop.
 - 2026-07-01: Added site-wide **GSAP ScrollSmoother** smooth scrolling (`components/SmoothScroll.tsx`, wired in `app/layout.tsx`). Anchor links scroll smoothly; navbar stays in flow; touch + reduce-motion fall back to native scroll.
 - 2026-07-01: Built the dark **Services** section (`[4] Deliverables`) from Figma — data-driven list of 4 services (title + description + thumbnail), side-by-side on desktop, stacked on mobile, with a GSAP fade-up per row. Reuses the design tokens (statement type scale, label/body sizes, tracking) to keep classes lean.
 - 2026-07-01: Added the full-bleed **Photo Banner** section with a **GSAP scroll parallax** (the photo drifts vertically as you scroll past). Same photo is used for desktop and mobile, re-cropped per screen.
