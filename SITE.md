@@ -15,10 +15,10 @@
   - `Playfair Display` (italic) — the decorative serif "&" in big statements
 
 ## Pages
-- **Homepage** (`/`) — shows the **Hero**, the **Creative Statement**, the **About** section, the full-bleed **Photo Banner**, the dark **Services** section, then **Selected Work**. More sections coming (News, Contact).
+- **Homepage** (`/`) — shows the **Hero**, the **Creative Statement**, the **About** section, the full-bleed **Photo Banner**, the dark **Services** section, **Selected Work**, then **Testimonials**. More sections coming (News, Contact).
 
 ## Editable content (CMS-ready)
-- `lib/content.ts` is the single place that holds the content for the **Services** and **Selected Work** sections — the types (`ServiceItem`, `WorkItem`) plus placeholder data (`PLACEHOLDER_SERVICES`, `PLACEHOLDER_WORKS`). Both sections already accept their data through an `items` prop, so hooking up a CMS later means: fetch → map to those types → pass into `<Services items={…} />` / `<Works items={…} />`. No component changes needed. Image fields are plain URL/path strings so a CMS can supply remote images.
+- `lib/content.ts` is the single place that holds the content for the **Services**, **Selected Work** and **Testimonials** sections — the types (`ServiceItem`, `WorkItem`, `TestimonialItem`) plus placeholder data (`PLACEHOLDER_SERVICES`, `PLACEHOLDER_WORKS`, `PLACEHOLDER_TESTIMONIALS`). Each section accepts its data through an `items` prop, so hooking up a CMS later means: fetch → map to those types → pass into `<Services items={…} />` / `<Works items={…} />` / `<Testimonials items={…} />`. No component changes needed. Image/logo fields are plain URL/path strings so a CMS can supply remote images.
 
 ## Components
 - **SmoothScroll** (`components/SmoothScroll.tsx`) — wraps the whole page in GSAP **ScrollSmoother** so scrolling glides with a smooth, eased feel (desktop wheel/trackpad only; touch devices keep native scrolling; off for "reduce motion"). In-page anchor links (About, Services…) are intercepted so they scroll smoothly to their section.
@@ -27,6 +27,7 @@
 - **Button** (`components/ui/Button.tsx`) — the reusable black pill button used for every "Let's talk".
 - **ProgressiveBlur** (`components/ProgressiveBlur.tsx`) — reusable CSS-only blur that gets stronger toward the bottom edge.
 - **CreativeStatement** (`components/CreativeStatement.tsx`) — the big editorial "A creative director / Photographer / Born & raised on the south side of chicago." statement. Staggered/indented on desktop, centered on mobile, with a fade-up reveal when scrolled into view.
+- **Testimonials** (`components/Testimonials.tsx`) — a giant "Testimonials" wordmark with review cards scattered around it. On desktop the cards are **draggable** (GSAP Draggable + inertia) and one sits *behind* the word while the rest are in front (z-index matches the Figma); on mobile it becomes a **Swiper** slider. CMS-ready via an `items` prop (see `lib/content.ts`); desktop positions cycle through a `POSITIONS` preset table in the component. Uses `swiper` + GSAP `Draggable`/`InertiaPlugin`.
 - **Works** (`components/Works.tsx`) — the "Selected Work" (004) portfolio section: a staggered two-column masonry on desktop, single column on mobile, closed by a corner-framed "Let's talk" CTA. Each card has an image with glass tags, a title and a ↗ arrow; cards lift/zoom on hover and reveal on scroll (GSAP). CMS-ready — takes an `items` prop (see `lib/content.ts`).
 - **Services** (`components/Services.tsx`) — the dark "Services / [4] Deliverables" section. CMS-ready: takes an `items` prop (defaults to the placeholder list in `lib/content.ts`); the "[4]" count is derived from the number of items. Each row: an index `[ n ]` + divider line, then an italic title with a description and a 151px square thumbnail (side-by-side on desktop, stacked on mobile). Rows fade up on scroll (GSAP). Descriptions are placeholders in `DESCRIPTION`; thumbnails live at `public/service-1..4.png`.
 - **PhotoBanner** (`components/PhotoBanner.tsx`) — a full-width (edge-to-edge) photograph of Harvey shooting with a camera. The image is oversized and clipped by the frame, and drifts vertically on scroll for a **GSAP parallax** effect (turns off for "reduce motion"). Photo lives at `public/photographer.png`.
@@ -40,6 +41,7 @@ All styling uses Tailwind + variables in `app/globals.css`, so new pages stay co
 - Labels: `font-mono text-[length:var(--text-label)]`
 
 ## Recent Changes
+- 2026-07-01: Built the **Testimonials** section from Figma — draggable scattered cards on desktop (GSAP Draggable + inertia, with the correct behind/in-front z-index against the big wordmark) and a Swiper slider on mobile. CMS-ready via `items` / `PLACEHOLDER_TESTIMONIALS`. Added `swiper` dependency.
 - 2026-07-01: Tuned **Selected Work** — shorter card images (aspect-ratio driven instead of fixed height, so it's responsive at every width), more top/side breathing room, a responsive column offset (`clamp`), and extra space before the CTA.
 - 2026-07-01: Built the **Selected Work** (004) section from Figma — staggered two-column masonry on desktop, single column on mobile, framed CTA, hover lift/zoom + scroll reveal (GSAP). Made both **Works** and **Services** CMS-ready by moving their content into `lib/content.ts` (typed placeholder data) and having the components accept an `items` prop.
 - 2026-07-01: Added site-wide **GSAP ScrollSmoother** smooth scrolling (`components/SmoothScroll.tsx`, wired in `app/layout.tsx`). Anchor links scroll smoothly; navbar stays in flow; touch + reduce-motion fall back to native scroll.

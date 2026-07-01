@@ -17,6 +17,13 @@ export type ServiceItem = {
   image: string;
 };
 
+export type TestimonialItem = {
+  quote: string;
+  author: string;
+  /** Company/brand logo (URL or path). */
+  logo?: string;
+};
+
 export type WorkItem = {
   title: string;
   tags: string[];
@@ -36,6 +43,35 @@ export const PLACEHOLDER_SERVICES: ServiceItem[] = [
   { title: "Web design & Dev", description: SERVICE_DESCRIPTION, image: "/service-2.png" },
   { title: "Marketing", description: SERVICE_DESCRIPTION, image: "/service-3.png" },
   { title: "Photography", description: SERVICE_DESCRIPTION, image: "/service-4.png" },
+];
+
+// Order matters: the Testimonials section maps each item to a preset scatter
+// position on desktop (see the POSITIONS table in components/Testimonials.tsx).
+export const PLACEHOLDER_TESTIMONIALS: TestimonialItem[] = [
+  {
+    quote:
+      "A brilliant creative partner who transformed our vision into a unique, high-impact brand identity. Their ability to craft everything from custom mascots to polished logos is truly impressive.",
+    author: "Marko Stojković",
+    logo: "/logo-marko.svg",
+  },
+  {
+    quote:
+      "Professional, precise, and incredibly fast at handling complex product visualizations and templates.",
+    author: "Lukas Weber",
+    logo: "/logo-lukas.svg",
+  },
+  {
+    quote:
+      "A strategic partner who balances stunning aesthetics with high-performance UX for complex platforms. They don’t just make things look good; they solve business problems through visual clarity.",
+    author: "Sarah Jenkins",
+    logo: "/logo-sarah.svg",
+  },
+  {
+    quote:
+      "An incredibly versatile designer who delivers consistent quality across a wide range of styles and formats.",
+    author: "Sofia Martínez",
+    logo: "/logo-sofia.svg",
+  },
 ];
 
 export const PLACEHOLDER_WORKS: WorkItem[] = [
