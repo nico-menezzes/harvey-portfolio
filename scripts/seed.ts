@@ -1,18 +1,23 @@
 /**
- * Seeds the Sanity CMS with the site's real content + uploads the existing
- * images from /public as CMS assets.
+ * Seeds the Sanity CMS:
+ *   • builds the "Home" page in the page builder (same sections, same order as
+ *     the original site) so nothing changes visually, but everything is editable
+ *   • fills the 3 content lists (Services, Work/Projects, News)
+ *   • uploads the images from /public as CMS assets
  *
  * Run once with:
  *   npx sanity exec scripts/seed.ts --with-user-token
  *
- * Safe to re-run: it clears the repeatable collections and replaces the
- * one-of-a-kind sections each time.
+ * Safe to re-run: it clears the old content each time and rewrites it.
  */
 import { getCliClient } from 'sanity/cli'
 import { createReadStream } from 'fs'
 import { join } from 'path'
 
 const client = getCliClient({ apiVersion: '2026-07-02' })
+
+let keyCounter = 0
+const key = () => `k${(keyCounter++).toString(36)}${Date.now().toString(36)}`
 
 // Upload each /public image only once, caching by filename.
 const imageCache = new Map<string, { _type: string; asset: { _type: string; _ref: string }; alt: string }>()
@@ -34,97 +39,158 @@ async function image(file: string, alt: string) {
 }
 
 async function run() {
-  console.log('Clearing existing collection items…')
-  await client.delete({ query: '*[_type in ["service", "project", "post", "testimonial"]]' })
+  console.log('Clearing old content…')
+  await client.delete({
+    query:
+      '*[_type in ["page", "service", "project", "post", "testimonial", "siteSettings", "heroSection", "creativeStatement", "aboutSection", "photoBanner", "footer"]]',
+  })
 
-  console.log('Uploading images + writing sections…')
+  console.log('Uploading images + building the Home page…')
 
-  // ── Site Settings (menu) ──────────────────────────────────
+  // ── Images used across the page ───────────────────────────
+  const heroImg = await image('hero.png', 'Billboard on a sunlit city street')
+  const aboutImg = await image(
+    'about-portrait.png',
+    'Black and white portrait of Harvey, half his face lit against a dark background',
+  )
+  const bannerImg = await image(
+    'photographer.png',
+    'Harvey shooting on location with a Nikon camera at golden hour',
+  )
+  const logoMarko = await image('logo-marko.svg', 'Marko Stojković brand logo')
+  const logoLukas = await image('logo-lukas.svg', 'Lukas Weber brand logo')
+  const logoSarah = await image('logo-sarah.svg', 'Sarah Jenkins brand logo')
+  const logoSofia = await image('logo-sofia.svg', 'Sofia Martínez brand logo')
+
+  // ── The Home page (page builder) ──────────────────────────
   await client.createOrReplace({
-    _id: 'siteSettings',
-    _type: 'siteSettings',
-    logo: 'H.Studio',
-    ctaLabel: "Let's talk",
-    navLinks: [
-      { _key: 'about', label: 'About', href: '#about' },
-      { _key: 'services', label: 'Services', href: '#services' },
-      { _key: 'projects', label: 'Projects', href: '#projects' },
-      { _key: 'news', label: 'News', href: '#news' },
-      { _key: 'contact', label: 'Contact', href: '#contact' },
+    _id: 'page-home',
+    _type: 'page',
+    title: 'Home',
+    slug: { _type: 'slug', current: 'home' },
+    pageBuilder: [
+      // Menu (top bar)
+      {
+        _key: key(),
+        _type: 'navbarBlock',
+        logo: 'H.Studio',
+        ctaLabel: "Let's talk",
+        navLinks: [
+          { _key: key(), label: 'About', href: '#about' },
+          { _key: key(), label: 'Services', href: '#services' },
+          { _key: key(), label: 'Projects', href: '#projects' },
+          { _key: key(), label: 'News', href: '#news' },
+          { _key: key(), label: 'Contact', href: '#contact' },
+        ],
+      },
+      // Hero
+      {
+        _key: key(),
+        _type: 'heroBlock',
+        eyebrow: "[ Hello i'm ]",
+        name: 'Harvey Specter',
+        intro:
+          "H.Studio is a full-service creative studio building beautiful digital experiences and products. We're an award-winning design and art group specializing in branding, web design and engineering.",
+        ctaLabel: "Let's talk",
+        backgroundImage: heroImg,
+      },
+      // Creative Statement
+      {
+        _key: key(),
+        _type: 'creativeStatementBlock',
+        eyebrow: '[ 8+ years in industry ]',
+        index: '001',
+        lines: [
+          'A creative director   /',
+          'Photographer',
+          'Born & raised',
+          'on the south side',
+          'of chicago.',
+        ],
+        freelancerTag: '[ creative freelancer ]',
+      },
+      // About
+      {
+        _key: key(),
+        _type: 'aboutBlock',
+        label: '[ About ]',
+        index: '002',
+        paragraph:
+          "I'm Harvey — a creative director and photographer who has spent the last eight years turning brands into things people actually remember. I work closely with founders and small teams who care about the details, from the first rough sketch to the final pixel. When I'm not behind a screen, I'm behind a camera, chasing light across Chicago.",
+        portrait: aboutImg,
+      },
+      // Photo Banner
+      {
+        _key: key(),
+        _type: 'photoBannerBlock',
+        image: bannerImg,
+      },
+      // Services (pulls from the Services list)
+      { _key: key(), _type: 'servicesBlock' },
+      // Work (pulls from the Work list)
+      { _key: key(), _type: 'worksBlock' },
+      // Testimonials (edited inline, right here)
+      {
+        _key: key(),
+        _type: 'testimonialsBlock',
+        items: [
+          {
+            _key: key(),
+            _type: 'testimonialItem',
+            quote:
+              'A brilliant creative partner who turned our vision into a distinctive, high-impact brand identity. From custom mascots to a polished logo system, everything just clicked.',
+            author: 'Marko Stojković',
+            logo: logoMarko,
+          },
+          {
+            _key: key(),
+            _type: 'testimonialItem',
+            quote:
+              'Professional, precise, and incredibly fast at handling complex product visualizations and templates. Delivery was ahead of schedule every single time.',
+            author: 'Lukas Weber',
+            logo: logoLukas,
+          },
+          {
+            _key: key(),
+            _type: 'testimonialItem',
+            quote:
+              "A strategic partner who balances striking aesthetics with high-performance UX. He doesn't just make things look good — he solves real business problems through visual clarity.",
+            author: 'Sarah Jenkins',
+            logo: logoSarah,
+          },
+          {
+            _key: key(),
+            _type: 'testimonialItem',
+            quote:
+              'An incredibly versatile designer who delivers consistent quality across a wide range of styles and formats. A rare mix of taste and reliability.',
+            author: 'Sofia Martínez',
+            logo: logoSofia,
+          },
+        ],
+      },
+      // News (pulls from the News list)
+      { _key: key(), _type: 'newsBlock' },
+      // Footer
+      {
+        _key: key(),
+        _type: 'footerBlock',
+        ctaText: 'Have a project in mind?',
+        ctaButtonLabel: "Let's talk",
+        ctaButtonHref: 'mailto:hello@h.studio',
+        socials: [
+          { _key: key(), label: 'Facebook', href: 'https://facebook.com/h.studio' },
+          { _key: key(), label: 'Instagram', href: 'https://instagram.com/h.studio' },
+          { _key: key(), label: 'x.com', href: 'https://x.com/h_studio' },
+          { _key: key(), label: 'Linkedin', href: 'https://linkedin.com/company/h-studio' },
+        ],
+        legal: [
+          { _key: key(), label: 'Licences', href: '#' },
+          { _key: key(), label: 'Privacy policy', href: '#' },
+        ],
+        wordmark: 'H.Studio',
+        credit: '[ Coded By Claude ]',
+      },
     ],
-  })
-
-  // ── Hero ──────────────────────────────────────────────────
-  await client.createOrReplace({
-    _id: 'heroSection',
-    _type: 'heroSection',
-    eyebrow: "[ Hello i'm ]",
-    name: 'Harvey Specter',
-    intro:
-      "H.Studio is a full-service creative studio building beautiful digital experiences and products. We're an award-winning design and art group specializing in branding, web design and engineering.",
-    ctaLabel: "Let's talk",
-    backgroundImage: await image('hero.png', 'Billboard on a sunlit city street'),
-  })
-
-  // ── Creative Statement ────────────────────────────────────
-  await client.createOrReplace({
-    _id: 'creativeStatement',
-    _type: 'creativeStatement',
-    eyebrow: '[ 8+ years in industry ]',
-    index: '001',
-    lines: [
-      'A creative director   /',
-      'Photographer',
-      'Born & raised',
-      'on the south side',
-      'of chicago.',
-    ],
-    freelancerTag: '[ creative freelancer ]',
-  })
-
-  // ── About ─────────────────────────────────────────────────
-  await client.createOrReplace({
-    _id: 'aboutSection',
-    _type: 'aboutSection',
-    label: '[ About ]',
-    index: '002',
-    paragraph:
-      "I'm Harvey — a creative director and photographer who has spent the last eight years turning brands into things people actually remember. I work closely with founders and small teams who care about the details, from the first rough sketch to the final pixel. When I'm not behind a screen, I'm behind a camera, chasing light across Chicago.",
-    portrait: await image(
-      'about-portrait.png',
-      'Black and white portrait of Harvey, half his face lit against a dark background',
-    ),
-  })
-
-  // ── Photo Banner ──────────────────────────────────────────
-  await client.createOrReplace({
-    _id: 'photoBanner',
-    _type: 'photoBanner',
-    image: await image(
-      'photographer.png',
-      'Harvey shooting on location with a Nikon camera at golden hour',
-    ),
-  })
-
-  // ── Footer ────────────────────────────────────────────────
-  await client.createOrReplace({
-    _id: 'footer',
-    _type: 'footer',
-    ctaText: 'Have a project in mind?',
-    ctaButtonLabel: "Let's talk",
-    ctaButtonHref: 'mailto:hello@h.studio',
-    socials: [
-      { _key: 'fb', label: 'Facebook', href: 'https://facebook.com/h.studio' },
-      { _key: 'ig', label: 'Instagram', href: 'https://instagram.com/h.studio' },
-      { _key: 'x', label: 'x.com', href: 'https://x.com/h_studio' },
-      { _key: 'in', label: 'Linkedin', href: 'https://linkedin.com/company/h-studio' },
-    ],
-    legal: [
-      { _key: 'lic', label: 'Licences', href: '#' },
-      { _key: 'priv', label: 'Privacy policy', href: '#' },
-    ],
-    wordmark: 'H.Studio',
-    credit: '[ Coded By Claude ]',
   })
 
   // ── Services (collection) ─────────────────────────────────
@@ -132,7 +198,7 @@ async function run() {
     {
       title: 'Brand Discovery',
       description:
-        'We dig into what makes your brand tick — your story, your audience, the people you\'re up against — then turn it into a clear identity you can actually use: logo, type, color, and the rules that keep it all consistent.',
+        "We dig into what makes your brand tick — your story, your audience, the people you're up against — then turn it into a clear identity you can actually use: logo, type, color, and the rules that keep it all consistent.",
       file: 'service-1.png',
     },
     {
@@ -165,7 +231,7 @@ async function run() {
     })
   }
 
-  // ── Projects / Selected Work (collection) ─────────────────
+  // ── Work / Projects (collection) ──────────────────────────
   const projects = [
     { title: 'Surfers Paradise', tags: ['Photography', 'Social Media'], ratio: '5 / 4', file: 'work-1.png' },
     { title: 'Cyberpunk Caffe', tags: ['Art Direction', 'Photography'], ratio: '4 / 3', file: 'work-2.png' },
@@ -181,44 +247,6 @@ async function run() {
       ratio: p.ratio,
       href: '#',
       image: await image(p.file, p.title),
-      order: i + 1,
-    })
-  }
-
-  // ── Testimonials (collection) ─────────────────────────────
-  const testimonials = [
-    {
-      quote:
-        'A brilliant creative partner who turned our vision into a distinctive, high-impact brand identity. From custom mascots to a polished logo system, everything just clicked.',
-      author: 'Marko Stojković',
-      file: 'logo-marko.svg',
-    },
-    {
-      quote:
-        'Professional, precise, and incredibly fast at handling complex product visualizations and templates. Delivery was ahead of schedule every single time.',
-      author: 'Lukas Weber',
-      file: 'logo-lukas.svg',
-    },
-    {
-      quote:
-        'A strategic partner who balances striking aesthetics with high-performance UX. He doesn\'t just make things look good — he solves real business problems through visual clarity.',
-      author: 'Sarah Jenkins',
-      file: 'logo-sarah.svg',
-    },
-    {
-      quote:
-        'An incredibly versatile designer who delivers consistent quality across a wide range of styles and formats. A rare mix of taste and reliability.',
-      author: 'Sofia Martínez',
-      file: 'logo-sofia.svg',
-    },
-  ]
-  for (let i = 0; i < testimonials.length; i++) {
-    const t = testimonials[i]
-    await client.create({
-      _type: 'testimonial',
-      quote: t.quote,
-      author: t.author,
-      logo: await image(t.file, `${t.author} brand logo`),
       order: i + 1,
     })
   }
@@ -268,7 +296,7 @@ async function run() {
     })
   }
 
-  console.log('\n✅ Done. Seeded all sections, collections and images.')
+  console.log('\n✅ Done. Built the Home page and seeded Services, Work and News.')
 }
 
 run().catch((err) => {

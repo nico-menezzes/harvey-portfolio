@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Navbar } from "@/components/Navbar";
 import { ProgressiveBlur } from "@/components/ProgressiveBlur";
 import { HeroTitle } from "@/components/HeroTitle";
 import { Button } from "@/components/ui/Button";
@@ -13,19 +12,7 @@ type HeroData = {
   imageAlt?: string;
 };
 
-type NavSettings = {
-  logo?: string;
-  ctaLabel?: string;
-  navLinks?: { label: string; href: string }[];
-};
-
-export function Hero({
-  data,
-  settings,
-}: {
-  data?: HeroData;
-  settings?: NavSettings;
-} = {}) {
+export function Hero({ data }: { data?: HeroData } = {}) {
   const eyebrow = data?.eyebrow || "[ Hello i'm ]";
   const name = data?.name || "Harvey Specter";
   const intro =
@@ -58,10 +45,8 @@ export function Hero({
       {/* Progressive blur band fading in toward the bottom edge */}
       <ProgressiveBlur className="absolute inset-x-0 bottom-0 h-[var(--hero-blur-height)]" />
 
-      {/* Top navigation (carries its own z-index) */}
-      <Navbar settings={settings} />
-
-      {/* Hero content */}
+      {/* Hero content — the top navigation is now a separate "Menu" block that
+          overlays this section from the page builder. */}
       <div className="relative flex flex-1 flex-col justify-end gap-[clamp(2rem,6vh,4rem)] pb-[clamp(2rem,6vh,4rem)]">
         {/* Eyebrow + display name */}
         <div className="flex flex-col">

@@ -2,13 +2,13 @@ import { defineType, defineField, defineArrayMember } from 'sanity'
 import { BlockquoteIcon } from '@sanity/icons'
 
 /**
- * Creative Statement — the big editorial lines under the hero
+ * Creative Statement block — the big editorial lines
  * ("A creative director / Photographer / Born & raised …").
  */
-export const creativeStatement = defineType({
-  name: 'creativeStatement',
+export const creativeStatementBlock = defineType({
+  name: 'creativeStatementBlock',
   title: 'Creative Statement',
-  type: 'document',
+  type: 'object',
   icon: BlockquoteIcon,
   fields: [
     defineField({

@@ -2,13 +2,13 @@ import { defineType, defineField } from 'sanity'
 import { UserIcon } from '@sanity/icons'
 
 /**
- * About — the intro paragraph framed by corner ticks, paired with the tall
- * black & white portrait.
+ * About block — the intro paragraph framed by corner ticks, paired with the
+ * tall black & white portrait.
  */
-export const aboutSection = defineType({
-  name: 'aboutSection',
+export const aboutBlock = defineType({
+  name: 'aboutBlock',
   title: 'About',
-  type: 'document',
+  type: 'object',
   icon: UserIcon,
   fields: [
     defineField({
@@ -41,7 +41,7 @@ export const aboutSection = defineType({
     }),
   ],
   preview: {
-    select: { media: 'portrait' },
-    prepare: ({ media }) => ({ title: 'About', media }),
+    select: { subtitle: 'paragraph', media: 'portrait' },
+    prepare: ({ subtitle, media }) => ({ title: 'About', subtitle, media }),
   },
 })

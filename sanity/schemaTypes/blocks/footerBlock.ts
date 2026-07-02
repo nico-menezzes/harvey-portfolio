@@ -2,13 +2,13 @@ import { defineType, defineField, defineArrayMember } from 'sanity'
 import { StackCompactIcon } from '@sanity/icons'
 
 /**
- * Footer — the black closing block: the "Have a project in mind?" call-to-action,
- * social + legal links, and the giant wordmark.
+ * Footer block — the black closing block: the "Have a project in mind?"
+ * call-to-action, social + legal links, and the giant wordmark.
  */
-export const footer = defineType({
-  name: 'footer',
+export const footerBlock = defineType({
+  name: 'footerBlock',
   title: 'Footer',
-  type: 'document',
+  type: 'object',
   icon: StackCompactIcon,
   fields: [
     defineField({
@@ -56,6 +56,7 @@ export const footer = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: 'Footer' }),
+    select: { title: 'wordmark' },
+    prepare: ({ title }) => ({ title: 'Footer', subtitle: title }),
   },
 })

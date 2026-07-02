@@ -3,35 +3,44 @@ import { type SchemaTypeDefinition } from 'sanity'
 // Shared objects
 import { linkItem } from './objects/linkItem'
 
-// Singletons (one-of-a-kind sections)
-import { siteSettings } from './singletons/siteSettings'
-import { heroSection } from './singletons/heroSection'
-import { creativeStatement } from './singletons/creativeStatement'
-import { aboutSection } from './singletons/aboutSection'
-import { photoBanner } from './singletons/photoBanner'
-import { footer } from './singletons/footer'
+// Page builder — section blocks
+import { navbarBlock } from './blocks/navbarBlock'
+import { heroBlock } from './blocks/heroBlock'
+import { creativeStatementBlock } from './blocks/creativeStatementBlock'
+import { aboutBlock } from './blocks/aboutBlock'
+import { photoBannerBlock } from './blocks/photoBannerBlock'
+import { servicesBlock } from './blocks/servicesBlock'
+import { worksBlock } from './blocks/worksBlock'
+import { testimonialsBlock } from './blocks/testimonialsBlock'
+import { newsBlock } from './blocks/newsBlock'
+import { footerBlock } from './blocks/footerBlock'
 
-// Collections (repeatable content)
+// Documents
+import { page } from './documents/page'
 import { service } from './documents/service'
 import { project } from './documents/project'
 import { post } from './documents/post'
-import { testimonial } from './documents/testimonial'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
-    // objects
+    // shared objects
     linkItem,
-    // singletons
-    siteSettings,
-    heroSection,
-    creativeStatement,
-    aboutSection,
-    photoBanner,
-    footer,
-    // collections
+    // page-builder blocks
+    navbarBlock,
+    heroBlock,
+    creativeStatementBlock,
+    aboutBlock,
+    photoBannerBlock,
+    servicesBlock,
+    worksBlock,
+    testimonialsBlock,
+    newsBlock,
+    footerBlock,
+    // documents
+    page,
+    // collections (the 3 sections that stay as lists in the CMS)
     service,
     project,
     post,
-    testimonial,
   ],
 }

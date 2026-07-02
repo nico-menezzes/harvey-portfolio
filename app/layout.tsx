@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono, Playfair_Display } from "next/font/google";
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
 import "./globals.css";
 import { AgentationProvider } from "@/components/AgentationProvider";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { SanityLive } from "@/sanity/lib/live";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,11 +34,13 @@ export const metadata: Metadata = {
     "H.Studio is a full-service creative studio creating beautiful digital experiences and products — branding, web design and engineering.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isEnabled: isDraft } = await draftMode();
+
   return (
     <html
       lang="en"
@@ -43,6 +48,9 @@ export default function RootLayout({
     >
       <body className="bg-background font-sans text-foreground antialiased">
         <SmoothScroll>{children}</SmoothScroll>
+        {/* Keeps content live-updating; VisualEditing powers click-to-edit in preview. */}
+        <SanityLive />
+        {isDraft && <VisualEditing />}
         <AgentationProvider />
       </body>
     </html>

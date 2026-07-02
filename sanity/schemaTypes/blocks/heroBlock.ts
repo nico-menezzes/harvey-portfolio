@@ -2,13 +2,13 @@ import { defineType, defineField } from 'sanity'
 import { HomeIcon } from '@sanity/icons'
 
 /**
- * Hero — the full-screen opening: the big name over a background photo, a short
- * intro paragraph and the "Let's talk" button.
+ * Hero block — the full-screen opening: the big name over a background photo,
+ * a short intro paragraph and the "Let's talk" button.
  */
-export const heroSection = defineType({
-  name: 'heroSection',
-  title: 'Hero (Opening)',
-  type: 'document',
+export const heroBlock = defineType({
+  name: 'heroBlock',
+  title: 'Hero (opening)',
+  type: 'object',
   icon: HomeIcon,
   fields: [
     defineField({
@@ -43,11 +43,7 @@ export const heroSection = defineType({
       type: 'image',
       options: { hotspot: true },
       fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt text (for accessibility)',
-          type: 'string',
-        }),
+        defineField({ name: 'alt', title: 'Alt text (for accessibility)', type: 'string' }),
       ],
     }),
   ],

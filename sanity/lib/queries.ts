@@ -1,73 +1,84 @@
 import { groq } from 'next-sanity'
 
 /**
- * Everything the homepage needs, in one request. Images are returned as ready-to-use
- * URLs (`asset->url`) so the components can drop them straight into <Image>.
+ * The projection for a page built with the page builder. Each section block is
+ * expanded by its `_type`. The Services / Work / News blocks pull their items
+ * straight from the three content collections. Images are returned as
+ * ready-to-use URLs (`asset->url`) so components can drop them into <Image>.
  */
-export const HOMEPAGE_QUERY = groq`{
-  "settings": *[_id == "siteSettings"][0]{
-    logo,
-    ctaLabel,
-    navLinks[]{ _key, label, href }
-  },
-  "hero": *[_id == "heroSection"][0]{
-    eyebrow,
-    name,
-    intro,
-    ctaLabel,
-    "image": backgroundImage.asset->url,
-    "imageAlt": backgroundImage.alt
-  },
-  "statement": *[_id == "creativeStatement"][0]{
-    eyebrow,
-    index,
-    lines,
-    freelancerTag
-  },
-  "about": *[_id == "aboutSection"][0]{
-    label,
-    index,
-    paragraph,
-    "portrait": portrait.asset->url,
-    "portraitAlt": portrait.alt
-  },
-  "photoBanner": *[_id == "photoBanner"][0]{
-    "image": image.asset->url,
-    "imageAlt": image.alt
-  },
-  "services": *[_type == "service"] | order(order asc, _createdAt asc){
-    _id,
-    title,
-    description,
-    "image": image.asset->url
-  },
-  "works": *[_type == "project"] | order(order asc, _createdAt asc){
-    _id,
-    title,
-    tags,
-    href,
-    ratio,
-    "image": image.asset->url
-  },
-  "testimonials": *[_type == "testimonial"] | order(order asc, _createdAt asc){
-    _id,
-    quote,
-    author,
-    "logo": logo.asset->url
-  },
-  "news": *[_type == "post"] | order(order asc, _createdAt asc)[0...5]{
-    _id,
-    excerpt,
-    href,
-    "image": image.asset->url
-  },
-  "footer": *[_id == "footer"][0]{
-    ctaText,
-    ctaButtonLabel,
-    ctaButtonHref,
-    socials[]{ _key, label, href },
-    legal[]{ _key, label, href },
-    wordmark,
-    credit
+const PAGE_BUILDER = groq`
+  pageBuilder[]{
+    _key,
+    _type,
+    _type == "navbarBlock" => {
+      logo,
+      ctaLabel,
+      navLinks[]{ _key, label, href }
+    },
+    _type == "heroBlock" => {
+      eyebrow,
+      name,
+      intro,
+      ctaLabel,
+      "image": backgroundImage.asset->url,
+      "imageAlt": backgroundImage.alt
+    },
+    _type == "creativeStatementBlock" => {
+      eyebrow,
+      index,
+      lines,
+      freelancerTag
+    },
+    _type == "aboutBlock" => {
+      label,
+      index,
+      paragraph,
+      "portrait": portrait.asset->url,
+      "portraitAlt": portrait.alt
+    },
+    _type == "photoBannerBlock" => {
+      "image": image.asset->url,
+      "imageAlt": image.alt
+    },
+    _type == "servicesBlock" => {
+      "items": *[_type == "service"] | order(order asc, _createdAt asc){
+        _id, title, description, "image": image.asset->url
+      }
+    },
+    _type == "worksBlock" => {
+      "items": *[_type == "project"] | order(order asc, _createdAt asc){
+        _id, title, tags, href, ratio, "image": image.asset->url
+      }
+    },
+    _type == "testimonialsBlock" => {
+      "items": items[]{ _key, quote, author, "logo": logo.asset->url }
+    },
+    _type == "newsBlock" => {
+      "items": *[_type == "post"] | order(order asc, _createdAt asc)[0...5]{
+        _id, excerpt, href, "image": image.asset->url
+      }
+    },
+    _type == "footerBlock" => {
+      ctaText,
+      ctaButtonLabel,
+      ctaButtonHref,
+      socials[]{ _key, label, href },
+      legal[]{ _key, label, href },
+      wordmark,
+      credit
+    }
   }
+`
+
+/** One page by its web address (slug). */
+export const PAGE_QUERY = groq`*[_type == "page" && slug.current == $slug][0]{
+  _id,
+  title,
+  "slug": slug.current,
+  ${PAGE_BUILDER}
+}`
+
+/** Every page slug — used to pre-build the dynamic routes. */
+export const PAGE_SLUGS_QUERY = groq`*[_type == "page" && defined(slug.current) && slug.current != "home"]{
+  "slug": slug.current
 }`

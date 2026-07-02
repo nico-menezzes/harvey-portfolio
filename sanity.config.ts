@@ -7,6 +7,7 @@
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
+import {presentationTool, defineLocations} from 'sanity/presentation'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import {apiVersion, dataset, projectId} from './sanity/env'
@@ -21,6 +22,31 @@ export default defineConfig({
   schema,
   plugins: [
     structureTool({structure}),
+    // Presentation = the live, click-to-edit preview of the site next to the editor.
+    presentationTool({
+      previewUrl: {
+        previewMode: {
+          enable: '/api/draft-mode/enable',
+          disable: '/api/draft-mode/disable',
+        },
+      },
+      resolve: {
+        // Tells "Open preview" where each page lives on the site.
+        locations: {
+          page: defineLocations({
+            select: {title: 'title', slug: 'slug.current'},
+            resolve: (doc) => ({
+              locations: [
+                {
+                  title: doc?.title || 'Page',
+                  href: doc?.slug === 'home' ? '/' : `/${doc?.slug}`,
+                },
+              ],
+            }),
+          }),
+        },
+      },
+    }),
     // Vision is for querying with GROQ from inside the Studio
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({defaultApiVersion: apiVersion}),

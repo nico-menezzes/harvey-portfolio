@@ -1,22 +1,21 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
-import { CogIcon } from '@sanity/icons'
+import { MenuIcon } from '@sanity/icons'
 
 /**
- * Site Settings — the navigation bar at the top of the page: the logo text,
- * the menu links and the "Let's talk" button label.
+ * Menu block — the top navigation bar: the logo text, the menu links and the
+ * "Let's talk" button label. Drop it at the very top of a page.
  */
-export const siteSettings = defineType({
-  name: 'siteSettings',
-  title: 'Site Settings',
-  type: 'document',
-  icon: CogIcon,
+export const navbarBlock = defineType({
+  name: 'navbarBlock',
+  title: 'Menu (top bar)',
+  type: 'object',
+  icon: MenuIcon,
   fields: [
     defineField({
       name: 'logo',
       title: 'Logo text',
       type: 'string',
-      description: 'The wordmark shown top-left in the menu (e.g. "H.Studio").',
-      validation: (rule) => rule.required(),
+      description: 'The wordmark shown top-left (e.g. "H.Studio").',
     }),
     defineField({
       name: 'navLinks',
@@ -33,6 +32,7 @@ export const siteSettings = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: 'Site Settings' }),
+    select: { title: 'logo' },
+    prepare: ({ title }) => ({ title: title || 'Menu', subtitle: 'Top navigation bar' }),
   },
 })

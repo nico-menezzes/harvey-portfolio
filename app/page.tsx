@@ -1,3 +1,5 @@
+import { PageBuilder, type Block } from "@/components/PageBuilder";
+import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { CreativeStatement } from "@/components/CreativeStatement";
 import { About } from "@/components/About";
@@ -7,39 +9,44 @@ import { Works } from "@/components/Works";
 import { Testimonials } from "@/components/Testimonials";
 import { News } from "@/components/News";
 import { Footer } from "@/components/Footer";
-import { client } from "@/sanity/lib/client";
-import { HOMEPAGE_QUERY } from "@/sanity/lib/queries";
-import {
-  PLACEHOLDER_SERVICES,
-  PLACEHOLDER_WORKS,
-  PLACEHOLDER_TESTIMONIALS,
-  PLACEHOLDER_NEWS,
-} from "@/lib/content";
+import { sanityFetch } from "@/sanity/lib/live";
+import { PAGE_QUERY } from "@/sanity/lib/queries";
 
-// Re-check the CMS for changes at most every 30 seconds.
-export const revalidate = 30;
-
+/**
+ * Homepage — the page built in the CMS with the slug "home". If the CMS has no
+ * home page yet, we fall back to the built-in sections with their defaults so
+ * the site never renders blank.
+ */
 export default async function Home() {
-  const data = await client.fetch(HOMEPAGE_QUERY);
+  const { data } = await sanityFetch({
+    query: PAGE_QUERY,
+    params: { slug: "home" },
+  });
+  const page = data as { pageBuilder?: Block[] } | null;
 
-  const services = data?.services?.length ? data.services : PLACEHOLDER_SERVICES;
-  const works = data?.works?.length ? data.works : PLACEHOLDER_WORKS;
-  const testimonials = data?.testimonials?.length
-    ? data.testimonials
-    : PLACEHOLDER_TESTIMONIALS;
-  const news = data?.news?.length ? data.news : PLACEHOLDER_NEWS;
+  if (page?.pageBuilder?.length) {
+    return (
+      <main className="relative">
+        <PageBuilder blocks={page.pageBuilder} />
+      </main>
+    );
+  }
 
+  // Safety net: the original section order with each component's own defaults.
   return (
-    <main>
-      <Hero data={data?.hero} settings={data?.settings} />
-      <CreativeStatement data={data?.statement} />
-      <About data={data?.about} />
-      <PhotoBanner data={data?.photoBanner} />
-      <Services items={services} />
-      <Works items={works} />
-      <Testimonials items={testimonials} />
-      <News items={news} />
-      <Footer data={data?.footer} />
+    <main className="relative">
+      <div className="absolute inset-x-0 top-0 z-50 px-[var(--gutter)]">
+        <Navbar />
+      </div>
+      <Hero />
+      <CreativeStatement />
+      <About />
+      <PhotoBanner />
+      <Services />
+      <Works />
+      <Testimonials />
+      <News />
+      <Footer />
     </main>
   );
 }

@@ -1,6 +1,10 @@
 export const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2026-07-02'
 
+// Optional viewer token, used for draft previews (the click-to-edit experience).
+// Without it, the published site still works — only the live preview is disabled.
+export const token = process.env.SANITY_API_READ_TOKEN
+
 export const dataset = assertValue(
   process.env.NEXT_PUBLIC_SANITY_DATASET,
   'Missing environment variable: NEXT_PUBLIC_SANITY_DATASET'

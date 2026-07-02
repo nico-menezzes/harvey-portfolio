@@ -2,12 +2,12 @@ import { defineType, defineField } from 'sanity'
 import { ImageIcon } from '@sanity/icons'
 
 /**
- * Photo Banner — the full-width photograph band with the scroll parallax.
+ * Photo Banner block — the full-width photograph band with the scroll parallax.
  */
-export const photoBanner = defineType({
-  name: 'photoBanner',
+export const photoBannerBlock = defineType({
+  name: 'photoBannerBlock',
   title: 'Photo Banner',
-  type: 'document',
+  type: 'object',
   icon: ImageIcon,
   fields: [
     defineField({
@@ -23,6 +23,6 @@ export const photoBanner = defineType({
   ],
   preview: {
     select: { media: 'image' },
-    prepare: ({ media }) => ({ title: 'Photo Banner', media }),
+    prepare: ({ media }) => ({ title: 'Photo Banner', subtitle: 'Full-width photo', media }),
   },
 })
