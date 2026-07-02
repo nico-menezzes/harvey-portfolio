@@ -1,10 +1,41 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
+
+type StatementData = {
+  eyebrow?: string;
+  index?: string;
+  lines?: string[];
+  freelancerTag?: string;
+};
+
+const DEFAULT_LINES = [
+  "A creative director   /",
+  "Photographer",
+  "Born & raised",
+  "on the south side",
+  "of chicago.",
+];
+
+// Per-line indentation on desktop — keeps the staggered, asymmetric rhythm.
+const INDENTS = ["", "lg:pl-[15.5%]", "lg:pl-[44%]", "", "lg:pl-[44%]"];
+
+/** Turn any "&" the editor types into the decorative italic serif ampersand. */
+function renderAmpersands(text: string) {
+  const parts = text.split("&");
+  return parts.map((part, i) => (
+    <Fragment key={i}>
+      {part}
+      {i < parts.length - 1 && (
+        <span className="font-serif italic normal-case">&amp;</span>
+      )}
+    </Fragment>
+  ));
+}
 
 /**
  * Editorial statement section — large uppercase display copy laid out in a
@@ -12,8 +43,13 @@ gsap.registerPlugin(ScrollTrigger);
  * with a slow, smooth staggered fade-up (GSAP + ScrollTrigger) the first time
  * the section scrolls into view.
  */
-export function CreativeStatement() {
+export function CreativeStatement({ data }: { data?: StatementData } = {}) {
   const ref = useRef<HTMLElement>(null);
+
+  const eyebrow = data?.eyebrow || "[ 8+ years in industry ]";
+  const index = data?.index || "001";
+  const lines = data?.lines && data.lines.length > 0 ? data.lines : DEFAULT_LINES;
+  const freelancerTag = data?.freelancerTag || "[ creative freelancer ]";
 
   useEffect(() => {
     const el = ref.current;
@@ -76,7 +112,7 @@ export function CreativeStatement() {
         {/* Eyebrow + rule */}
         <div className="flex w-full flex-col items-end gap-3">
           <p data-reveal className={`w-full text-right ${label}`}>
-            [ 8+ years in industry ]
+            {eyebrow}
           </p>
           <hr
             aria-hidden
@@ -87,44 +123,47 @@ export function CreativeStatement() {
 
         {/* Statement */}
         <div className="flex w-full flex-col gap-2 text-center text-[length:var(--text-statement)] font-light uppercase leading-[0.84] tracking-[var(--tracking-statement)] text-foreground lg:text-left">
-          {/* 001 — centered above the first line on mobile only */}
+          {/* index — centered above the first line on mobile only */}
           <span data-reveal className={`mx-auto ${label} lg:hidden`}>
-            001
+            {index}
           </span>
 
-          {/* Line 1 */}
-          <div
-            data-reveal
-            className="flex w-full items-center justify-center gap-3 lg:items-start lg:justify-start"
-          >
-            <span className="whitespace-pre">{"A creative director   /"}</span>
-            <span className={`hidden self-start lg:inline-block ${label}`}>001</span>
-          </div>
+          {lines.map((line, i) => {
+            const isFirst = i === 0;
+            const isLast = i === lines.length - 1;
+            const indent = INDENTS[i] ?? "";
 
-          {/* Line 2 */}
-          <div data-reveal className="w-full lg:pl-[15.5%]">
-            Photographer
-          </div>
+            // First line carries the inline index label on desktop.
+            if (isFirst) {
+              return (
+                <div
+                  key={i}
+                  data-reveal
+                  className="flex w-full items-center justify-center gap-3 lg:items-start lg:justify-start"
+                >
+                  <span className="whitespace-pre-wrap">
+                    {renderAmpersands(line)}
+                  </span>
+                  <span className={`hidden self-start lg:inline-block ${label}`}>
+                    {index}
+                  </span>
+                </div>
+              );
+            }
 
-          {/* Line 3 */}
-          <div data-reveal className="w-full lg:pl-[44%]">
-            Born <span className="font-serif italic normal-case">&amp;</span> raised
-          </div>
-
-          {/* Line 4 */}
-          <div data-reveal className="w-full">
-            on the south side
-          </div>
-
-          {/* Line 5 + freelancer tag */}
-          <div data-reveal className="relative w-full lg:pl-[44%]">
-            of chicago.
-            <span
-              className={`mt-3 block ${label} lg:absolute lg:left-[78%] lg:top-[1.6rem] lg:mt-0`}
-            >
-              [ creative freelancer ]
-            </span>
-          </div>
+            return (
+              <div key={i} data-reveal className={`relative w-full ${indent}`}>
+                {renderAmpersands(line)}
+                {isLast && freelancerTag && (
+                  <span
+                    className={`mt-3 block ${label} lg:absolute lg:left-[78%] lg:top-[1.6rem] lg:mt-0`}
+                  >
+                    {freelancerTag}
+                  </span>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

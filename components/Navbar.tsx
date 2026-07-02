@@ -4,16 +4,29 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
-const NAV_LINKS = [
+const DEFAULT_NAV_LINKS = [
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Projects", href: "#projects" },
   { label: "News", href: "#news" },
   { label: "Contact", href: "#contact" },
-] as const;
+];
 
-export function Navbar() {
+type NavSettings = {
+  logo?: string;
+  ctaLabel?: string;
+  navLinks?: { label: string; href: string }[];
+};
+
+export function Navbar({ settings }: { settings?: NavSettings } = {}) {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const logo = settings?.logo || "H.Studio";
+  const ctaLabel = settings?.ctaLabel || "Let's talk";
+  const NAV_LINKS =
+    settings?.navLinks && settings.navLinks.length > 0
+      ? settings.navLinks
+      : DEFAULT_NAV_LINKS;
 
   // Lock body scroll while the mobile menu is open.
   useEffect(() => {
@@ -38,7 +51,7 @@ export function Navbar() {
             href="/"
             className="text-[16px] font-semibold capitalize tracking-[var(--tracking-tight)]"
           >
-            H.Studio
+            {logo}
           </Link>
 
           {/* Desktop links */}
@@ -57,7 +70,7 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:block">
-            <Button href="#contact">Let&apos;s talk</Button>
+            <Button href="#contact">{ctaLabel}</Button>
           </div>
 
           {/* Mobile toggle (hamburger ↔ X) */}
@@ -126,7 +139,7 @@ export function Navbar() {
 
         <div className="pt-10">
           <Button href="#contact" className="w-full" onClick={() => setMenuOpen(false)}>
-            Let&apos;s talk
+            {ctaLabel}
           </Button>
         </div>
       </div>

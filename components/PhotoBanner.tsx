@@ -4,9 +4,13 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import photographer from "../public/photographer.png";
 
 gsap.registerPlugin(ScrollTrigger);
+
+type PhotoBannerData = {
+  image?: string;
+  imageAlt?: string;
+};
 
 /**
  * Full-bleed photograph band with a GSAP scroll parallax. The inner image is
@@ -14,9 +18,14 @@ gsap.registerPlugin(ScrollTrigger);
  * moves through the viewport, so the photo feels set behind the page rather
  * than pinned to it. Respects "reduce motion".
  */
-export function PhotoBanner() {
+export function PhotoBanner({ data }: { data?: PhotoBannerData } = {}) {
   const frame = useRef<HTMLDivElement>(null);
   const inner = useRef<HTMLDivElement>(null);
+
+  const image = data?.image || "/photographer.png";
+  const imageAlt =
+    data?.imageAlt ||
+    "A photographer in a hoodie shooting with a Nikon camera at golden hour";
 
   useEffect(() => {
     const frameEl = frame.current;
@@ -58,8 +67,8 @@ export function PhotoBanner() {
           className="absolute inset-x-0 top-[-16%] h-[132%] will-change-transform"
         >
           <Image
-            src={photographer}
-            alt="A photographer in a hoodie shooting with a Nikon camera at golden hour"
+            src={image}
+            alt={imageAlt}
             fill
             sizes="100vw"
             className="object-cover object-center"

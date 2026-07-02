@@ -17,8 +17,24 @@
 ## Pages
 - **Homepage** (`/`) — the full page, in order: **Hero → Creative Statement → About → Photo Banner → Services → Selected Work → Testimonials → News → Footer**. (Complete.)
 
-## Editable content (CMS-ready)
-- `lib/content.ts` is the single place that holds the content for the **Services**, **Selected Work**, **Testimonials** and **News** sections — the types (`ServiceItem`, `WorkItem`, `TestimonialItem`, `NewsItem`) plus placeholder data (`PLACEHOLDER_SERVICES`, `PLACEHOLDER_WORKS`, `PLACEHOLDER_TESTIMONIALS`, `PLACEHOLDER_NEWS`). Each section accepts its data through an `items` prop, so hooking up a CMS later means: fetch → map to those types → pass into the section (`<News items={…} />`, etc.). No component changes needed. Image/logo fields are plain URL/path strings so a CMS can supply remote images. (News is meant to be capped at 5 items in the CMS.)
+## Content editing (Sanity CMS) — READ THIS FIRST
+**Almost all text and every image on the site is now edited in Sanity, your content manager.** You don't need to touch code to change words or photos.
+
+- **Where to edit:** open **`/studio`** in your site (e.g. `yoursite.com/studio`). Log in with your Sanity account. You'll see a sidebar called **Website Content**.
+- **How it's organised in the sidebar:**
+  - **Site Settings (menu)** — the top menu: logo text, menu links, and the "Let's talk" button label.
+  - **Hero (Opening)** — the big name, small label, intro paragraph, button, and background photo.
+  - **Creative Statement** — the big editorial lines ("A creative director / Photographer …"). Type `&` and it becomes the fancy italic symbol automatically. Keep it to about 5 lines.
+  - **About** — the intro paragraph and the tall portrait photo.
+  - **Photo Banner** — the full-width photo.
+  - **Footer** — the "Have a project in mind?" text, the button + link, social links, legal links, and the giant wordmark.
+  - **Services** — add/edit each service (title, description, thumbnail). Use the **Order** number to sort them.
+  - **Projects (Selected Work)** — each portfolio card (title, tags, image, link, image shape). Sorted by **Order**.
+  - **News Posts** — each news card (image, text, "Read more" link). Only the first **5** (by Order) show on the site.
+  - **Testimonials** — each review (quote, author, brand logo). Sorted by **Order**.
+- **After editing:** click **Publish**. The website updates within about 30 seconds.
+- **What is NOT in the CMS (stays in code, by design):** the three section headings — **Services / Deliverables**, **Selected Work**, and the **News** heading — plus the "Testimonials" wordmark. Everything else is editable.
+- **Under the hood:** section schemas live in `sanity/schemaTypes/` (singletons in `singletons/`, collections in `documents/`); the sidebar layout is `sanity/structure.ts`; the homepage fetches everything in one query (`sanity/lib/queries.ts`) inside `app/page.tsx` and passes it to each section. Images come from the Sanity CDN (`cdn.sanity.io`, allowed in `next.config.ts`). If the CMS is ever empty, sections fall back to the safe defaults in `lib/content.ts` and each component. The one-time content import is `scripts/seed.ts` (re-run with `npx sanity exec scripts/seed.ts --with-user-token`).
 
 ## Components
 - **Footer** (`components/Footer.tsx`) — black footer with a "Have a project in mind?" CTA + outlined "Let's talk" button, social links (two aligned columns on desktop, stacked on mobile), a divider, legal links, and a giant "H.Studio" wordmark that bleeds off the bottom edge with a vertical "Coded By Claude" credit. Has `id="contact"`, so the navbar's Contact link scrolls here. Social/legal hrefs are placeholders (`#`) to fill in later.
@@ -43,6 +59,7 @@ All styling uses Tailwind + variables in `app/globals.css`, so new pages stay co
 - Labels: `font-mono text-[length:var(--text-label)]`
 
 ## Recent Changes
+- 2026-07-02: **Connected the whole site to Sanity CMS.** All section text and images are now edited at `/studio` — created schemas for Site Settings, Hero, Creative Statement, About, Photo Banner, Footer (one-of-a-kind sections) plus Services, Projects, News Posts and Testimonials (add/remove collections, sorted by an Order number). Organised the Studio sidebar (`sanity/structure.ts`), wired the homepage to fetch everything from Sanity (`app/page.tsx` + `sanity/lib/queries.ts`), refactored each component to take its content as props, allowed Sanity CDN images in `next.config.ts`, and imported all real copy + uploaded the 18 existing images via `scripts/seed.ts`. Removed the old lorem/placeholder text. Only the Services/Selected Work/News headings and the "Testimonials" wordmark stay in code.
 - 2026-07-01: Built the **Footer** from Figma (CTA, social/legal links, giant bleeding "H.Studio" wordmark, "Coded By Claude" credit) and wired it as the `#contact` anchor. Homepage is now complete end-to-end.
 - 2026-07-01: Built the **News** section from Figma — desktop pins and scrolls the cards horizontally with the page scroll (GSAP ScrollTrigger pin + scrub), mobile is a Swiper carousel. CMS-ready via `items` / `PLACEHOLDER_NEWS` (cap 5).
 - 2026-07-01: Testimonials desktop heading now uses the Hero's fit-to-width logic (measures the word and scales the font to span the full stage width, via ResizeObserver) instead of a capped size.
@@ -58,7 +75,7 @@ All styling uses Tailwind + variables in `app/globals.css`, so new pages stay co
 - 2026-06-30: Hero polish — anchored the progressive blur to the bottom edge; fixed the big "Harvey Specter" title so it blends with the photo (`mix-blend-overlay`) and runs full-width to the right using `vw` sizing; framed the photo from the top (`object-top`); turned the mobile menu into a full-screen overlay with a solid background and a slide-down animation.
 
 ## How to Customize
-- **Change a color:** edit the variables at the top of `app/globals.css` (e.g. `--c-paper`, `--accent`).
-- **Change the hero photo:** replace `public/hero-harvey.png`.
-- **Edit nav links:** edit the `NAV_LINKS` list at the top of `components/Navbar.tsx`.
-- **Edit hero text:** edit `components/Hero.tsx`.
+- **Change any text or photo (the easy way):** go to **`/studio`**, edit the section, and click **Publish**. See "Content editing (Sanity CMS)" above.
+- **Change a color:** edit the variables at the top of `app/globals.css` (e.g. `--c-paper`, `--accent`). (Colors are in code, not the CMS.)
+- **Add a new service / project / news post / testimonial:** in `/studio`, open that list, click **Create**, fill it in, set the **Order** number, and Publish.
+- **Reorder items:** change the **Order** number (lower = first) and Publish.

@@ -4,12 +4,19 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import aboutPortrait from "../public/about-portrait.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PARAGRAPH =
-  "Placeholder paragraph one. This is where you introduce yourself — your background, your passion for your craft, and what drives you creatively. Two to three sentences work best here. Placeholder paragraph two. Here you can describe your technical approach, how you collaborate with clients, or what sets your work apart from others in your field.";
+type AboutData = {
+  label?: string;
+  index?: string;
+  paragraph?: string;
+  portrait?: string;
+  portraitAlt?: string;
+};
+
+const DEFAULT_PARAGRAPH =
+  "I'm Harvey — a creative director and photographer who has spent the last eight years turning brands into things people actually remember. I work closely with founders and small teams who care about the details, from the first rough sketch to the final pixel. When I'm not behind a screen, I'm behind a camera, chasing light across Chicago.";
 
 const label =
   "font-mono text-[length:var(--text-label)] uppercase leading-[1.1] text-muted";
@@ -28,7 +35,13 @@ function Corners() {
 }
 
 /** The framed body paragraph, reused across mobile + desktop layouts. */
-function FramedParagraph({ className = "" }: { className?: string }) {
+function FramedParagraph({
+  text,
+  className = "",
+}: {
+  text: string;
+  className?: string;
+}) {
   return (
     <div className={`relative ${className}`}>
       <Corners />
@@ -36,22 +49,30 @@ function FramedParagraph({ className = "" }: { className?: string }) {
         data-reveal
         className="px-6 py-3 text-[length:var(--text-body)] leading-[1.3] tracking-[var(--tracking-tight)] text-muted"
       >
-        {PARAGRAPH}
+        {text}
       </p>
     </div>
   );
 }
 
 /** The tall black & white portrait, reused across layouts. */
-function Portrait({ className = "" }: { className?: string }) {
+function Portrait({
+  src,
+  alt,
+  className = "",
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+}) {
   return (
     <div
       data-img
       className={`relative overflow-hidden [clip-path:inset(0)] ${className}`}
     >
       <Image
-        src={aboutPortrait}
-        alt="Black and white portrait, half of the face lit against a dark background"
+        src={src}
+        alt={alt}
         fill
         sizes="(min-width: 1024px) 436px, 100vw"
         className="object-cover object-center"
@@ -66,8 +87,16 @@ function Portrait({ className = "" }: { className?: string }) {
  * Reveals on scroll (GSAP + ScrollTrigger): labels and copy fade up, the corner
  * ticks pop in, and the portrait wipes open top-to-bottom with a slow zoom.
  */
-export function About() {
+export function About({ data }: { data?: AboutData } = {}) {
   const ref = useRef<HTMLElement>(null);
+
+  const labelText = data?.label || "[ About ]";
+  const index = data?.index || "002";
+  const paragraph = data?.paragraph || DEFAULT_PARAGRAPH;
+  const portrait = data?.portrait || "/about-portrait.png";
+  const portraitAlt =
+    data?.portraitAlt ||
+    "Black and white portrait, half of the face lit against a dark background";
 
   useEffect(() => {
     const el = ref.current;
@@ -119,22 +148,26 @@ export function About() {
     >
       {/* Mobile: stacked */}
       <div className="flex flex-col gap-5 lg:hidden">
-        <p data-reveal className={label}>002</p>
-        <p data-reveal className={label}>[ About ]</p>
-        <FramedParagraph />
-        <Portrait className="aspect-[422/594] w-full" />
+        <p data-reveal className={label}>{index}</p>
+        <p data-reveal className={label}>{labelText}</p>
+        <FramedParagraph text={paragraph} />
+        <Portrait src={portrait} alt={portraitAlt} className="aspect-[422/594] w-full" />
       </div>
 
       {/* Desktop: label top-left, paragraph bottom-aligned with the portrait,
-          index (002) pinned to the portrait's top. */}
+          index pinned to the portrait's top. */}
       <div className="hidden items-start justify-between gap-8 lg:flex">
-        <p data-reveal className={`shrink-0 ${label}`}>[ About ]</p>
+        <p data-reveal className={`shrink-0 ${label}`}>{labelText}</p>
 
         <div className="flex w-[68%] max-w-[983px] items-end gap-8">
-          <FramedParagraph className="flex-1" />
+          <FramedParagraph text={paragraph} className="flex-1" />
           <div className="flex shrink-0 items-start gap-6">
-            <p data-reveal className={label}>002</p>
-            <Portrait className="aspect-[436/614] w-[clamp(300px,30vw,436px)]" />
+            <p data-reveal className={label}>{index}</p>
+            <Portrait
+              src={portrait}
+              alt={portraitAlt}
+              className="aspect-[436/614] w-[clamp(300px,30vw,436px)]"
+            />
           </div>
         </div>
       </div>

@@ -1,11 +1,23 @@
-const SOCIALS = [
+type FooterLink = { label: string; href: string };
+
+type FooterData = {
+  ctaText?: string;
+  ctaButtonLabel?: string;
+  ctaButtonHref?: string;
+  socials?: FooterLink[];
+  legal?: FooterLink[];
+  wordmark?: string;
+  credit?: string;
+};
+
+const DEFAULT_SOCIALS: FooterLink[] = [
   { label: "Facebook", href: "#" },
   { label: "Instagram", href: "#" },
   { label: "x.com", href: "#" },
   { label: "Linkedin", href: "#" },
 ];
 
-const LEGAL = [
+const DEFAULT_LEGAL: FooterLink[] = [
   { label: "Licences", href: "#" },
   { label: "Privacy policy", href: "#" },
 ];
@@ -24,7 +36,15 @@ const wordmark =
  * legal links, and a huge "H.Studio" wordmark that bleeds off the bottom edge
  * (with a vertical "Coded By Claude" credit). Doubles as the #contact anchor.
  */
-export function Footer() {
+export function Footer({ data }: { data?: FooterData } = {}) {
+  const ctaText = data?.ctaText || "Have a project in mind?";
+  const ctaButtonLabel = data?.ctaButtonLabel || "Let's talk";
+  const ctaButtonHref = data?.ctaButtonHref || "#contact";
+  const SOCIALS = data?.socials && data.socials.length > 0 ? data.socials : DEFAULT_SOCIALS;
+  const LEGAL = data?.legal && data.legal.length > 0 ? data.legal : DEFAULT_LEGAL;
+  const wordmarkText = data?.wordmark || "H.Studio";
+  const credit = data?.credit || "[ Coded By Claude ]";
+
   return (
     <footer
       id="contact"
@@ -36,13 +56,13 @@ export function Footer() {
           {/* CTA */}
           <div className="flex w-[298px] max-w-full flex-col gap-3">
             <p className="text-[24px] font-light italic uppercase leading-[1.1] tracking-[var(--tracking-tight)]">
-              Have a <span className="font-black not-italic">project</span> in mind?
+              {ctaText}
             </p>
             <a
-              href="#"
+              href={ctaButtonHref}
               className="inline-flex w-fit items-center justify-center rounded-full border border-white px-4 py-3 text-[length:var(--text-body)] font-medium tracking-[var(--tracking-tight)] transition-colors duration-200 hover:bg-white hover:text-black"
             >
-              Let&apos;s talk
+              {ctaButtonLabel}
             </a>
           </div>
 
@@ -84,9 +104,9 @@ export function Footer() {
         </div>
         <div className="w-full">
           <p className="mb-3 font-mono text-[10px] uppercase leading-[1.1]">
-            [ Coded By Claude ]
+            {credit}
           </p>
-          <p className={wordmark}>H.Studio</p>
+          <p className={wordmark}>{wordmarkText}</p>
         </div>
       </div>
 
@@ -95,10 +115,10 @@ export function Footer() {
         <div className="relative min-w-0 flex-1">
           <div className="absolute left-0 top-1/2 flex h-[160px] w-[15px] -translate-y-1/2 items-center justify-center">
             <span className="-rotate-90 whitespace-nowrap font-mono text-[length:var(--text-label)] uppercase">
-              [ Coded By Claude ]
+              {credit}
             </span>
           </div>
-          <p className={`pl-10 ${wordmark}`}>H.Studio</p>
+          <p className={`pl-10 ${wordmark}`}>{wordmarkText}</p>
         </div>
         <div className="flex shrink-0 gap-[34px] pb-8">
           {LEGAL.map((l) => (
