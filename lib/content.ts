@@ -20,7 +20,10 @@ export type ServiceItem = {
 export type NewsItem = {
   image: string;
   excerpt: string;
-  /** Link to the full article. */
+  title?: string;
+  /** Article slug — links to the internal page at /news/[slug]. */
+  slug?: string;
+  /** Legacy/external link fallback if there's no slug. */
   href?: string;
 };
 

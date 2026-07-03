@@ -9,6 +9,8 @@ import { ServiceFeature } from "@/components/ServiceFeature";
 import { Works } from "@/components/Works";
 import { Testimonials } from "@/components/Testimonials";
 import { News } from "@/components/News";
+import { NewsHero } from "@/components/NewsHero";
+import { NewsArchive } from "@/components/NewsArchive";
 import { Contact } from "@/components/Contact";
 
 /**
@@ -144,6 +146,31 @@ function renderBlock(block: Block) {
 
     case "newsBlock":
       return <News key={block._key} items={nonEmpty(block.items)} />;
+
+    case "newsHeroBlock":
+      return (
+        <NewsHero
+          key={block._key}
+          data={{
+            eyebrow: block.eyebrow,
+            meta: block.meta,
+            title: block.title,
+            intro: block.intro,
+          }}
+        />
+      );
+
+    case "newsArchiveBlock":
+      return (
+        <NewsArchive
+          key={block._key}
+          data={{
+            eyebrow: block.eyebrow,
+            searchPlaceholder: block.searchPlaceholder,
+            items: block.items,
+          }}
+        />
+      );
 
     case "contactBlock":
       return (

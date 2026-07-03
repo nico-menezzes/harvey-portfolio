@@ -18,6 +18,8 @@ import { serviceFeatureBlock } from './blocks/serviceFeatureBlock'
 import { worksBlock } from './blocks/worksBlock'
 import { testimonialsBlock } from './blocks/testimonialsBlock'
 import { newsBlock } from './blocks/newsBlock'
+import { newsHeroBlock } from './blocks/newsHeroBlock'
+import { newsArchiveBlock } from './blocks/newsArchiveBlock'
 import { contactBlock } from './blocks/contactBlock'
 
 // Documents
@@ -45,6 +47,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     worksBlock,
     testimonialsBlock,
     newsBlock,
+    newsHeroBlock,
+    newsArchiveBlock,
     contactBlock,
     // documents
     page,

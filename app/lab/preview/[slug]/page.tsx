@@ -16,6 +16,8 @@ import { ServiceFeature } from "@/components/ServiceFeature";
 import { Works } from "@/components/Works";
 import { Testimonials } from "@/components/Testimonials";
 import { News } from "@/components/News";
+import { NewsHero } from "@/components/NewsHero";
+import { NewsArchive } from "@/components/NewsArchive";
 import { StatementHero } from "@/components/StatementHero";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
@@ -58,6 +60,19 @@ const RENDERERS: Record<string, () => ReactNode> = {
   works: () => <Works />,
   testimonials: () => <Testimonials />,
   news: () => <News />,
+  "news-hero": () => <NewsHero />,
+  "news-archive": () => (
+    <NewsArchive
+      data={{
+        items: [
+          { title: "30 Under 30 feature", excerpt: "Featured in Chicago's '30 Under 30' creative list for 2026.", slug: "30-under-30-feature", category: "Achievements", publishedAt: "2026-06-20", image: "/news-1.png" },
+          { title: "Coffee brand photo series", excerpt: "A three-week photo series shot on location across four cities.", slug: "coffee-brand-photo-series", category: "Photography", publishedAt: "2026-05-15", image: "/news-2.png" },
+          { title: "Agency 976 rebrand", excerpt: "A full rebrand — identity, website and voice.", slug: "agency-976-rebrand", category: "Branding", publishedAt: "2026-04-10", image: "/news-3.png" },
+          { title: "Speaking at DesignWeek", excerpt: "On building brands that don't look like everyone else's.", slug: "speaking-at-designweek", category: "Press", publishedAt: "2026-03-05", image: "/news-1.png" },
+        ],
+      }}
+    />
+  ),
   "statement-hero": () => <StatementHero />,
   contact: () => <Contact />,
   footer: () => <Footer />,

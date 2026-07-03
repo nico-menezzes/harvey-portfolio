@@ -195,6 +195,36 @@ export const SHOWCASE: ShowcaseEntry[] = [
     ],
   },
   {
+    slug: "news-hero",
+    name: "NewsHero",
+    path: "components/NewsHero.tsx",
+    category: "Section",
+    description:
+      "The editorial masthead that opens the News page — mono labels, a big title with the italic ampersand, and a short intro. Paper theme.",
+    frame: "light",
+    height: 520,
+    props: [
+      { name: "data.eyebrow / meta", type: "string", description: "Top-left and top-right labels." },
+      { name: "data.title", type: "string", description: 'Big title — "&" renders the italic symbol.' },
+      { name: "data.intro", type: "string", description: "Short paragraph." },
+    ],
+  },
+  {
+    slug: "news-archive",
+    name: "NewsArchive",
+    path: "components/NewsArchive.tsx",
+    category: "Section",
+    description:
+      "The searchable, filterable list of every post: a text search (title + excerpt) and one-click category filters (derived from the posts), over a responsive card grid. Cards link to the internal article page.",
+    frame: "light",
+    height: 820,
+    props: [
+      { name: "data.eyebrow", type: "string", description: "Small label above the grid." },
+      { name: "data.searchPlaceholder", type: "string", default: '"Search posts…"', description: "Search box placeholder." },
+      { name: "data.items", type: "ArchiveItem[]", description: "{ title, excerpt, slug, category, publishedAt, image } — all posts, newest first." },
+    ],
+  },
+  {
     slug: "statement-hero",
     name: "StatementHero",
     path: "components/StatementHero.tsx",

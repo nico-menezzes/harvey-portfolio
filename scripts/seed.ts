@@ -249,34 +249,51 @@ async function run() {
     })
   }
 
-  // ── News posts (collection, first 5 shown) ────────────────
+  // ── News posts (collection, first 5 on the homepage) ──────
+  const bodyBlock = (text: string, style = 'normal') => ({
+    _type: 'block',
+    _key: key(),
+    style,
+    markDefs: [],
+    children: [{ _type: 'span', _key: key(), text, marks: [] }],
+  })
   const posts = [
     {
       title: '30 Under 30 feature',
+      slug: '30-under-30-feature',
+      category: 'Achievements',
       excerpt:
         "Featured in Chicago's ‘30 Under 30’ creative list for 2026 — a huge honor alongside people I’ve looked up to for years.",
       file: 'news-1.png',
     },
     {
       title: 'Coffee brand photo series',
+      slug: 'coffee-brand-photo-series',
+      category: 'Photography',
       excerpt:
         'Wrapped a three-week photo series for a boutique coffee brand, shot on location across four cities and two very early mornings.',
       file: 'news-2.png',
     },
     {
       title: 'Agency 976 rebrand',
+      slug: 'agency-976-rebrand',
+      category: 'Branding',
       excerpt:
         'Launched a full rebrand for Agency 976 — new identity, new website, new voice. Months of work, live now and looking sharp.',
       file: 'news-3.png',
     },
     {
       title: 'Speaking at DesignWeek',
+      slug: 'speaking-at-designweek',
+      category: 'Press',
       excerpt:
         "Speaking at DesignWeek Chicago this fall about building brands that don’t look like everyone else’s. Come say hi.",
       file: 'news-1.png',
     },
     {
       title: 'New studio space',
+      slug: 'new-studio-space',
+      category: 'Studio',
       excerpt:
         'The new studio space is officially open — bigger walls, better light, and plenty of room to shoot. Drop by for a coffee.',
       file: 'news-2.png',
@@ -287,9 +304,12 @@ async function run() {
     await client.create({
       _type: 'post',
       title: p.title,
+      slug: { _type: 'slug', current: p.slug },
+      category: p.category,
+      publishedAt: new Date(Date.UTC(2026, 5 - i, 20)).toISOString(),
       excerpt: p.excerpt,
-      href: '#',
       image: await image(p.file, p.title),
+      body: [bodyBlock(p.excerpt), bodyBlock('More on this soon.')],
       order: i + 1,
     })
   }

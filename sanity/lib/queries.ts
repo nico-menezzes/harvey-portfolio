@@ -82,7 +82,25 @@ const PAGE_BUILDER = groq`
     },
     _type == "newsBlock" => {
       "items": *[_type == "post"] | order(order asc, _createdAt asc)[0...5]{
-        _id, excerpt, href, "image": image.asset->url
+        _id, title, excerpt, "slug": slug.current, "image": image.asset->url
+      }
+    },
+    _type == "newsHeroBlock" => {
+      eyebrow,
+      meta,
+      title,
+      intro
+    },
+    _type == "newsArchiveBlock" => {
+      eyebrow,
+      searchPlaceholder,
+      "items": *[_type == "post" && defined(slug.current)] | order(publishedAt desc, order asc){
+        title,
+        excerpt,
+        "slug": slug.current,
+        category,
+        publishedAt,
+        "image": image.asset->url
       }
     },
     _type == "contactBlock" => {
@@ -129,5 +147,21 @@ export const PAGE_QUERY = groq`*[_type == "page" && slug.current == $slug][0]{
 
 /** Every page slug — used to pre-build the dynamic routes. */
 export const PAGE_SLUGS_QUERY = groq`*[_type == "page" && defined(slug.current) && slug.current != "home"]{
+  "slug": slug.current
+}`
+
+/** A single News article by slug (for the internal page). */
+export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]{
+  title,
+  excerpt,
+  category,
+  publishedAt,
+  "image": image.asset->url,
+  "imageAlt": image.alt,
+  body
+}`
+
+/** Every News article slug — used to pre-build the article pages. */
+export const POST_SLUGS_QUERY = groq`*[_type == "post" && defined(slug.current)]{
   "slug": slug.current
 }`

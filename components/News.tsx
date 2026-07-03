@@ -46,7 +46,7 @@ function NewsCard({
         {item.excerpt}
       </p>
       <a
-        href={item.href ?? "#"}
+        href={item.slug ? `/news/${item.slug}` : item.href ?? "#"}
         className="inline-flex w-fit items-center gap-2.5 self-start border-b border-black py-1 text-[length:var(--text-body)] font-medium tracking-[var(--tracking-tight)] text-black transition-opacity duration-200 hover:opacity-60"
       >
         Read more
