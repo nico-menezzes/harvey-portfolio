@@ -30,6 +30,20 @@ export const navbarBlock = defineType({
       type: 'string',
       description: 'The button on the right of the menu (e.g. "Let\'s talk").',
     }),
+    defineField({
+      name: 'theme',
+      title: 'Text color',
+      type: 'string',
+      description: 'Pick based on what sits behind the menu.',
+      options: {
+        list: [
+          { title: 'White (over a photo / dark section)', value: 'onDark' },
+          { title: 'Black (over a light / paper section)', value: 'onLight' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'onDark',
+    }),
   ],
   preview: {
     select: { title: 'logo' },

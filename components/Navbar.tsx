@@ -18,7 +18,18 @@ type NavSettings = {
   navLinks?: { label: string; href: string }[];
 };
 
-export function Navbar({ settings }: { settings?: NavSettings } = {}) {
+/**
+ * `theme` sets the menu text color when closed:
+ *   • "onDark"  — white text (default; sits over a photo/dark hero)
+ *   • "onLight" — black text (use over a light/paper section)
+ */
+export function Navbar({
+  settings,
+  theme = "onDark",
+}: {
+  settings?: NavSettings;
+  theme?: "onDark" | "onLight";
+} = {}) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const logo = settings?.logo || "H.Studio";
@@ -27,6 +38,9 @@ export function Navbar({ settings }: { settings?: NavSettings } = {}) {
     settings?.navLinks && settings.navLinks.length > 0
       ? settings.navLinks
       : DEFAULT_NAV_LINKS;
+
+  // When closed, follow the theme; the open mobile overlay is always on paper.
+  const closedText = theme === "onLight" ? "text-foreground" : "text-on-dark";
 
   // Lock body scroll while the mobile menu is open.
   useEffect(() => {
@@ -42,7 +56,7 @@ export function Navbar({ settings }: { settings?: NavSettings } = {}) {
           toggle stay visible and clickable while the menu is open. */}
       <header
         className={`relative z-50 w-full transition-colors duration-300 ${
-          menuOpen ? "text-foreground" : "text-on-dark"
+          menuOpen ? "text-foreground" : closedText
         }`}
       >
         <nav aria-label="Primary" className="flex items-center justify-between py-6">

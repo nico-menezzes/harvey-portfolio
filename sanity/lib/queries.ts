@@ -13,6 +13,7 @@ const PAGE_BUILDER = groq`
     _type == "navbarBlock" => {
       logo,
       ctaLabel,
+      theme,
       navLinks[]{ _key, label, href }
     },
     _type == "heroBlock" => {
@@ -22,6 +23,24 @@ const PAGE_BUILDER = groq`
       ctaLabel,
       "image": backgroundImage.asset->url,
       "imageAlt": backgroundImage.alt
+    },
+    _type == "projectsHeroBlock" => {
+      eyebrow,
+      meta,
+      titleTop,
+      titleBottom,
+      intro,
+      years,
+      categories,
+      "projectCount": count(*[_type == "project"])
+    },
+    _type == "statementHeroBlock" => {
+      eyebrow,
+      ghostWord,
+      title,
+      intro,
+      ctaLabel,
+      ctaHref
     },
     _type == "creativeStatementBlock" => {
       eyebrow,

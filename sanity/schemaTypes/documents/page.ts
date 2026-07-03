@@ -36,6 +36,8 @@ export const page = defineType({
       of: [
         defineArrayMember({ type: 'navbarBlock' }),
         defineArrayMember({ type: 'heroBlock' }),
+        defineArrayMember({ type: 'projectsHeroBlock' }),
+        defineArrayMember({ type: 'statementHeroBlock' }),
         defineArrayMember({ type: 'creativeStatementBlock' }),
         defineArrayMember({ type: 'aboutBlock' }),
         defineArrayMember({ type: 'photoBannerBlock' }),

@@ -69,6 +69,22 @@ body {
    bottom edge instead of being a flat, uniform blur.
    Usage: <div class="progressive-blur"> + 6 empty <div> layers.
    ============================================================ */
+/* ============================================================
+   HERO MARQUEE
+   Seamless infinite ticker: two identical tracks side by side,
+   the wrapper slides -50% and loops. Off for reduced motion.
+   ============================================================ */
+@keyframes hero-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-hero-marquee {
+  animation: hero-marquee 34s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-marquee { animation: none; }
+}
+
 @layer utilities {
   .progressive-blur {
     pointer-events: none;

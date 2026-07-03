@@ -6,6 +6,8 @@ import { linkItem } from './objects/linkItem'
 // Page builder — section blocks
 import { navbarBlock } from './blocks/navbarBlock'
 import { heroBlock } from './blocks/heroBlock'
+import { projectsHeroBlock } from './blocks/projectsHeroBlock'
+import { statementHeroBlock } from './blocks/statementHeroBlock'
 import { creativeStatementBlock } from './blocks/creativeStatementBlock'
 import { aboutBlock } from './blocks/aboutBlock'
 import { photoBannerBlock } from './blocks/photoBannerBlock'
@@ -28,6 +30,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     // page-builder blocks
     navbarBlock,
     heroBlock,
+    projectsHeroBlock,
+    statementHeroBlock,
     creativeStatementBlock,
     aboutBlock,
     photoBannerBlock,

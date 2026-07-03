@@ -1,5 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { ProjectsHero } from "@/components/ProjectsHero";
+import { StatementHero } from "@/components/StatementHero";
 import { CreativeStatement } from "@/components/CreativeStatement";
 import { About } from "@/components/About";
 import { PhotoBanner } from "@/components/PhotoBanner";
@@ -37,6 +39,7 @@ function renderBlock(block: Block) {
           className="absolute inset-x-0 top-0 z-50 px-[var(--gutter)]"
         >
           <Navbar
+            theme={block.theme === "onLight" ? "onLight" : "onDark"}
             settings={{
               logo: block.logo,
               ctaLabel: block.ctaLabel,
@@ -57,6 +60,38 @@ function renderBlock(block: Block) {
             ctaLabel: block.ctaLabel,
             image: block.image,
             imageAlt: block.imageAlt,
+          }}
+        />
+      );
+
+    case "projectsHeroBlock":
+      return (
+        <ProjectsHero
+          key={block._key}
+          data={{
+            eyebrow: block.eyebrow,
+            meta: block.meta,
+            titleTop: block.titleTop,
+            titleBottom: block.titleBottom,
+            intro: block.intro,
+            projectCount: block.projectCount,
+            years: block.years,
+            categories: block.categories,
+          }}
+        />
+      );
+
+    case "statementHeroBlock":
+      return (
+        <StatementHero
+          key={block._key}
+          data={{
+            eyebrow: block.eyebrow,
+            ghostWord: block.ghostWord,
+            title: block.title,
+            intro: block.intro,
+            ctaLabel: block.ctaLabel,
+            ctaHref: block.ctaHref,
           }}
         />
       );
