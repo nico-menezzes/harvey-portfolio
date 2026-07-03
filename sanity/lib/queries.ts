@@ -77,6 +77,18 @@ const PAGE_BUILDER = groq`
         _id, excerpt, href, "image": image.asset->url
       }
     },
+    _type == "contactBlock" => {
+      eyebrow,
+      index,
+      heading,
+      intro,
+      email,
+      location,
+      availability,
+      socials[]{ _key, label, href },
+      projectTypes,
+      successMessage
+    },
     _type == "footerBlock" => {
       ctaText,
       ctaButtonLabel,

@@ -9,6 +9,7 @@ import { Services } from "@/components/Services";
 import { Works } from "@/components/Works";
 import { Testimonials } from "@/components/Testimonials";
 import { News } from "@/components/News";
+import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 
 /**
@@ -142,6 +143,25 @@ function renderBlock(block: Block) {
 
     case "newsBlock":
       return <News key={block._key} items={nonEmpty(block.items)} />;
+
+    case "contactBlock":
+      return (
+        <Contact
+          key={block._key}
+          data={{
+            eyebrow: block.eyebrow,
+            index: block.index,
+            heading: block.heading,
+            intro: block.intro,
+            email: block.email,
+            location: block.location,
+            availability: block.availability,
+            socials: block.socials,
+            projectTypes: block.projectTypes,
+            successMessage: block.successMessage,
+          }}
+        />
+      );
 
     case "footerBlock":
       return (

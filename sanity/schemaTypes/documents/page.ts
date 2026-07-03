@@ -45,6 +45,7 @@ export const page = defineType({
         defineArrayMember({ type: 'worksBlock' }),
         defineArrayMember({ type: 'testimonialsBlock' }),
         defineArrayMember({ type: 'newsBlock' }),
+        defineArrayMember({ type: 'contactBlock' }),
         defineArrayMember({ type: 'footerBlock' }),
       ],
       options: { insertMenu: { views: [{ name: 'grid' }, { name: 'list' }] } },

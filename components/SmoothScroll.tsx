@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -17,8 +18,12 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const wrapper = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // The component library (/lab) and its isolated previews use native scroll,
+    // so each component's own ScrollTrigger animations behave predictably.
+    if (pathname?.startsWith("/lab")) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (!wrapper.current || !content.current) return;
 
@@ -48,7 +53,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       document.removeEventListener("click", onClick);
       smoother.kill();
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <div id="smooth-wrapper" ref={wrapper}>

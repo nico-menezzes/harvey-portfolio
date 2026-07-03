@@ -62,6 +62,23 @@ body {
   color: var(--foreground);
 }
 
+/* Interactive elements always show the hand cursor (buttons default to an arrow
+   in modern CSS resets). Disabled controls fall back to not-allowed. */
+@layer base {
+  a,
+  button,
+  label[for],
+  summary,
+  [role="button"],
+  [role="tab"] {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
 /* ============================================================
    PROGRESSIVE BLUR (pure CSS)
    Stacked backdrop-filter layers, each with a gradient mask

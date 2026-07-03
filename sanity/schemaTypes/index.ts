@@ -16,12 +16,14 @@ import { worksBlock } from './blocks/worksBlock'
 import { testimonialsBlock } from './blocks/testimonialsBlock'
 import { newsBlock } from './blocks/newsBlock'
 import { footerBlock } from './blocks/footerBlock'
+import { contactBlock } from './blocks/contactBlock'
 
 // Documents
 import { page } from './documents/page'
 import { service } from './documents/service'
 import { project } from './documents/project'
 import { post } from './documents/post'
+import { contactMessage } from './documents/contactMessage'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -40,11 +42,14 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     testimonialsBlock,
     newsBlock,
     footerBlock,
+    contactBlock,
     // documents
     page,
     // collections (the 3 sections that stay as lists in the CMS)
     service,
     project,
     post,
+    // form submissions inbox
+    contactMessage,
   ],
 }
