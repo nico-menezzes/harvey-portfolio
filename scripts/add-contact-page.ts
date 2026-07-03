@@ -18,21 +18,9 @@ async function run() {
     _type: 'page',
     title: 'Contact',
     slug: { _type: 'slug', current: 'contact' },
+    menuTheme: 'onLight',
     pageBuilder: [
-      {
-        _key: key(),
-        _type: 'navbarBlock',
-        logo: 'H.Studio',
-        ctaLabel: "Let's talk",
-        theme: 'onLight',
-        navLinks: [
-          { _key: key(), label: 'About', href: '/#about' },
-          { _key: key(), label: 'Services', href: '/#services' },
-          { _key: key(), label: 'Projects', href: '/projects' },
-          { _key: key(), label: 'News', href: '/#news' },
-          { _key: key(), label: 'Contact', href: '/contact' },
-        ],
-      },
+      // (Menu + Footer are global — see Site Settings.)
       {
         _key: key(),
         _type: 'contactBlock',
@@ -52,25 +40,6 @@ async function run() {
         projectTypes: ['Branding', 'Web Design', 'Photography', 'Other'],
         successMessage:
           "Your message just landed in my inbox. I'll reply from a real email, usually within 24 hours.",
-      },
-      {
-        _key: key(),
-        _type: 'footerBlock',
-        ctaText: 'Prefer email?',
-        ctaButtonLabel: "Let's talk",
-        ctaButtonHref: 'mailto:hello@h.studio',
-        socials: [
-          { _key: key(), label: 'Facebook', href: 'https://facebook.com/h.studio' },
-          { _key: key(), label: 'Instagram', href: 'https://instagram.com/h.studio' },
-          { _key: key(), label: 'x.com', href: 'https://x.com/h_studio' },
-          { _key: key(), label: 'Linkedin', href: 'https://linkedin.com/company/h-studio' },
-        ],
-        legal: [
-          { _key: key(), label: 'Licences', href: '#' },
-          { _key: key(), label: 'Privacy policy', href: '#' },
-        ],
-        wordmark: 'H.Studio',
-        credit: '[ Coded By Claude ]',
       },
     ],
   })

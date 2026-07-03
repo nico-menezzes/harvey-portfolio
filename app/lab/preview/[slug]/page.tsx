@@ -12,6 +12,7 @@ import { CreativeStatement } from "@/components/CreativeStatement";
 import { About } from "@/components/About";
 import { PhotoBanner } from "@/components/PhotoBanner";
 import { Services } from "@/components/Services";
+import { ServiceFeature } from "@/components/ServiceFeature";
 import { Works } from "@/components/Works";
 import { Testimonials } from "@/components/Testimonials";
 import { News } from "@/components/News";
@@ -53,6 +54,7 @@ const RENDERERS: Record<string, () => ReactNode> = {
   about: () => <About />,
   "photo-banner": () => <PhotoBanner />,
   services: () => <Services />,
+  "service-feature": () => <ServiceFeature />,
   works: () => <Works />,
   testimonials: () => <Testimonials />,
   news: () => <News />,

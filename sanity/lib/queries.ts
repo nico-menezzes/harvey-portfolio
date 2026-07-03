@@ -10,12 +10,6 @@ const PAGE_BUILDER = groq`
   pageBuilder[]{
     _key,
     _type,
-    _type == "navbarBlock" => {
-      logo,
-      ctaLabel,
-      theme,
-      navLinks[]{ _key, label, href }
-    },
     _type == "heroBlock" => {
       eyebrow,
       name,
@@ -64,6 +58,20 @@ const PAGE_BUILDER = groq`
         _id, title, description, "image": image.asset->url
       }
     },
+    _type == "serviceFeatureBlock" => {
+      theme,
+      imageSide,
+      index,
+      kicker,
+      title,
+      lead,
+      description,
+      features,
+      "image": image.asset->url,
+      "imageAlt": image.alt,
+      ctaLabel,
+      ctaHref
+    },
     _type == "worksBlock" => {
       "items": *[_type == "project"] | order(order asc, _createdAt asc){
         _id, title, tags, href, ratio, "image": image.asset->url
@@ -88,24 +96,34 @@ const PAGE_BUILDER = groq`
       socials[]{ _key, label, href },
       projectTypes,
       successMessage
-    },
-    _type == "footerBlock" => {
-      ctaText,
-      ctaButtonLabel,
-      ctaButtonHref,
-      socials[]{ _key, label, href },
-      legal[]{ _key, label, href },
-      wordmark,
-      credit
     }
   }
 `
+
+/** Global menu + footer, configured once and shared by every page. */
+export const SETTINGS_QUERY = groq`*[_id == "siteSettings"][0]{
+  "nav": {
+    logo,
+    ctaLabel,
+    navLinks[]{ _key, label, href }
+  },
+  "footer": {
+    ctaText,
+    ctaButtonLabel,
+    ctaButtonHref,
+    socials[]{ _key, label, href },
+    legal[]{ _key, label, href },
+    wordmark,
+    credit
+  }
+}`
 
 /** One page by its web address (slug). */
 export const PAGE_QUERY = groq`*[_type == "page" && slug.current == $slug][0]{
   _id,
   title,
   "slug": slug.current,
+  menuTheme,
   ${PAGE_BUILDER}
 }`
 

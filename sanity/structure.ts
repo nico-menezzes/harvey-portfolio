@@ -5,6 +5,7 @@ import {
   CaseIcon,
   DocumentTextIcon,
   EnvelopeIcon,
+  CogIcon,
 } from '@sanity/icons'
 
 /**
@@ -16,6 +17,16 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Website Content')
     .items([
+      // ── Global menu + footer (configured once) ──────────────
+      S.listItem()
+        .title('Site Settings (menu & footer)')
+        .icon(CogIcon)
+        .child(
+          S.document().schemaType('siteSettings').documentId('siteSettings').title('Site Settings'),
+        ),
+
+      S.divider(),
+
       // ── The page builder ────────────────────────────────────
       S.documentTypeListItem('page').title('Pages').icon(DocumentsIcon),
 
@@ -41,6 +52,9 @@ export const structure: StructureResolver = (S) =>
       // Safety net for any other type, minus the ones handled above.
       ...S.documentTypeListItems().filter((item) => {
         const id = item.getId()
-        return id && !['page', 'service', 'project', 'post', 'contactMessage'].includes(id)
+        return (
+          id &&
+          !['siteSettings', 'page', 'service', 'project', 'post', 'contactMessage'].includes(id)
+        )
       }),
     ])

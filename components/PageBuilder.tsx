@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { ProjectsHero } from "@/components/ProjectsHero";
 import { StatementHero } from "@/components/StatementHero";
@@ -6,11 +5,11 @@ import { CreativeStatement } from "@/components/CreativeStatement";
 import { About } from "@/components/About";
 import { PhotoBanner } from "@/components/PhotoBanner";
 import { Services } from "@/components/Services";
+import { ServiceFeature } from "@/components/ServiceFeature";
 import { Works } from "@/components/Works";
 import { Testimonials } from "@/components/Testimonials";
 import { News } from "@/components/News";
 import { Contact } from "@/components/Contact";
-import { Footer } from "@/components/Footer";
 
 /**
  * A single section coming out of the page builder. Shape varies by `_type`;
@@ -31,25 +30,6 @@ function nonEmpty<T>(arr?: T[]): T[] | undefined {
 /** Render one section block by its type, mapping it onto a ready component. */
 function renderBlock(block: Block) {
   switch (block._type) {
-    case "navbarBlock":
-      // The menu overlays the top of the page (usually over the Hero), matching
-      // the original design where the nav sat on top of the hero photo.
-      return (
-        <div
-          key={block._key}
-          className="absolute inset-x-0 top-0 z-50 px-[var(--gutter)]"
-        >
-          <Navbar
-            theme={block.theme === "onLight" ? "onLight" : "onDark"}
-            settings={{
-              logo: block.logo,
-              ctaLabel: block.ctaLabel,
-              navLinks: block.navLinks,
-            }}
-          />
-        </div>
-      );
-
     case "heroBlock":
       return (
         <Hero
@@ -135,6 +115,27 @@ function renderBlock(block: Block) {
     case "servicesBlock":
       return <Services key={block._key} items={nonEmpty(block.items)} />;
 
+    case "serviceFeatureBlock":
+      return (
+        <ServiceFeature
+          key={block._key}
+          data={{
+            theme: block.theme,
+            imageSide: block.imageSide,
+            index: block.index,
+            kicker: block.kicker,
+            title: block.title,
+            lead: block.lead,
+            description: block.description,
+            features: block.features,
+            image: block.image,
+            imageAlt: block.imageAlt,
+            ctaLabel: block.ctaLabel,
+            ctaHref: block.ctaHref,
+          }}
+        />
+      );
+
     case "worksBlock":
       return <Works key={block._key} items={nonEmpty(block.items)} />;
 
@@ -159,22 +160,6 @@ function renderBlock(block: Block) {
             socials: block.socials,
             projectTypes: block.projectTypes,
             successMessage: block.successMessage,
-          }}
-        />
-      );
-
-    case "footerBlock":
-      return (
-        <Footer
-          key={block._key}
-          data={{
-            ctaText: block.ctaText,
-            ctaButtonLabel: block.ctaButtonLabel,
-            ctaButtonHref: block.ctaButtonHref,
-            socials: block.socials,
-            legal: block.legal,
-            wordmark: block.wordmark,
-            credit: block.credit,
           }}
         />
       );

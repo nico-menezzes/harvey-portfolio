@@ -32,7 +32,7 @@ export const SHOWCASE: ShowcaseEntry[] = [
     path: "components/Navbar.tsx",
     category: "Section",
     description:
-      "Top navigation, used as a standalone Menu block overlaid on the page. Desktop links + CTA; mobile hamburger opens a full-screen overlay.",
+      "Top navigation — now GLOBAL (configured once in Site Settings, overlaid on every page). Desktop links + CTA; mobile hamburger opens a full-screen overlay. Text color is set per page.",
     frame: "dark",
     height: 300,
     props: [
@@ -136,6 +136,26 @@ export const SHOWCASE: ShowcaseEntry[] = [
     ],
   },
   {
+    slug: "service-feature",
+    name: "ServiceFeature",
+    path: "components/ServiceFeature.tsx",
+    category: "Section",
+    description:
+      "One big, self-contained section for a single service: an editorial image + content split with an \"includes\" list and a CTA. Light or dark theme, image on either side — add one per service and alternate them to build rhythm. Reveals on scroll.",
+    frame: "light",
+    height: 720,
+    props: [
+      { name: "data.theme", type: '"light" | "dark"', default: '"light"', description: "Section color theme." },
+      { name: "data.imageSide", type: '"left" | "right"', default: '"left"', description: "Which side the image sits on (desktop)." },
+      { name: "data.index / kicker", type: "string", description: "Number and small label." },
+      { name: "data.title", type: "string", description: "Service name (big italic)." },
+      { name: "data.lead / description", type: "string", description: "One-liner + paragraph." },
+      { name: "data.features", type: "string[]", description: 'The numbered "what\'s included" list.' },
+      { name: "data.image / imageAlt", type: "string", description: "Service image + alt." },
+      { name: "data.ctaLabel / ctaHref", type: "string", description: "Button (hidden if label empty)." },
+    ],
+  },
+  {
     slug: "works",
     name: "Works",
     path: "components/Works.tsx",
@@ -216,7 +236,7 @@ export const SHOWCASE: ShowcaseEntry[] = [
     path: "components/Footer.tsx",
     category: "Section",
     description:
-      "Black closing block: a \"Have a project in mind?\" CTA, social + legal links, and a giant wordmark that bleeds off the bottom. Doubles as the #contact anchor.",
+      "Black closing block: a \"Have a project in mind?\" CTA, social + legal links, and a giant wordmark that bleeds off the bottom. Now GLOBAL (from Site Settings, added to every page automatically). Doubles as the #contact anchor.",
     frame: "dark",
     height: 680,
     props: [

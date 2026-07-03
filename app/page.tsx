@@ -1,5 +1,5 @@
 import { PageBuilder, type Block } from "@/components/PageBuilder";
-import { Navbar } from "@/components/Navbar";
+import { PageShell, type SiteSettings } from "@/components/PageShell";
 import { Hero } from "@/components/Hero";
 import { CreativeStatement } from "@/components/CreativeStatement";
 import { About } from "@/components/About";
@@ -8,36 +8,33 @@ import { Services } from "@/components/Services";
 import { Works } from "@/components/Works";
 import { Testimonials } from "@/components/Testimonials";
 import { News } from "@/components/News";
-import { Footer } from "@/components/Footer";
 import { sanityFetch } from "@/sanity/lib/live";
-import { PAGE_QUERY } from "@/sanity/lib/queries";
+import { PAGE_QUERY, SETTINGS_QUERY } from "@/sanity/lib/queries";
 
 /**
- * Homepage — the page built in the CMS with the slug "home". If the CMS has no
- * home page yet, we fall back to the built-in sections with their defaults so
- * the site never renders blank.
+ * Homepage — the page built in the CMS with the slug "home", wrapped in the
+ * global menu + footer (from Site Settings). Falls back to the built-in
+ * sections with their defaults if the CMS has no home page yet.
  */
 export default async function Home() {
-  const { data } = await sanityFetch({
-    query: PAGE_QUERY,
-    params: { slug: "home" },
-  });
-  const page = data as { pageBuilder?: Block[] } | null;
+  const [pageRes, settingsRes] = await Promise.all([
+    sanityFetch({ query: PAGE_QUERY, params: { slug: "home" } }),
+    sanityFetch({ query: SETTINGS_QUERY }),
+  ]);
+  const page = pageRes.data as { pageBuilder?: Block[]; menuTheme?: string } | null;
+  const settings = settingsRes.data as SiteSettings;
 
   if (page?.pageBuilder?.length) {
     return (
-      <main className="relative">
+      <PageShell settings={settings} menuTheme={page.menuTheme ?? "onDark"}>
         <PageBuilder blocks={page.pageBuilder} />
-      </main>
+      </PageShell>
     );
   }
 
   // Safety net: the original section order with each component's own defaults.
   return (
-    <main className="relative">
-      <div className="absolute inset-x-0 top-0 z-50 px-[var(--gutter)]">
-        <Navbar />
-      </div>
+    <PageShell settings={settings} menuTheme="onDark">
       <Hero />
       <CreativeStatement />
       <About />
@@ -46,7 +43,6 @@ export default async function Home() {
       <Works />
       <Testimonials />
       <News />
-      <Footer />
-    </main>
+    </PageShell>
   );
 }

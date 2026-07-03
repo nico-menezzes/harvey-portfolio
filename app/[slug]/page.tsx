@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PageBuilder, type Block } from "@/components/PageBuilder";
+import { PageShell, type SiteSettings } from "@/components/PageShell";
 import { client } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";
-import { PAGE_QUERY, PAGE_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { PAGE_QUERY, PAGE_SLUGS_QUERY, SETTINGS_QUERY } from "@/sanity/lib/queries";
 
 /**
- * Any page built in the CMS (other than "home") is served here at /its-slug.
- * We pre-build the known slugs, but new pages still work on demand.
+ * Any page built in the CMS (other than "home") is served here at /its-slug,
+ * wrapped in the global menu + footer.
  */
 export async function generateStaticParams() {
   const slugs = await client.fetch<{ slug: string }[]>(PAGE_SLUGS_QUERY);
@@ -35,17 +36,18 @@ export default async function DynamicPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { data } = await sanityFetch({
-    query: PAGE_QUERY,
-    params: { slug },
-  });
-  const page = data as { pageBuilder?: Block[] } | null;
+  const [pageRes, settingsRes] = await Promise.all([
+    sanityFetch({ query: PAGE_QUERY, params: { slug } }),
+    sanityFetch({ query: SETTINGS_QUERY }),
+  ]);
+  const page = pageRes.data as { pageBuilder?: Block[]; menuTheme?: string } | null;
+  const settings = settingsRes.data as SiteSettings;
 
   if (!page) notFound();
 
   return (
-    <main className="relative">
+    <PageShell settings={settings} menuTheme={page.menuTheme ?? "onLight"}>
       <PageBuilder blocks={page.pageBuilder} />
-    </main>
+    </PageShell>
   );
 }

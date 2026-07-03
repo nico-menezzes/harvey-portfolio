@@ -21,22 +21,9 @@ async function run() {
     _type: 'page',
     title: 'Projects',
     slug: { _type: 'slug', current: 'projects' },
+    menuTheme: 'onLight', // black menu over the light Projects Hero
     pageBuilder: [
-      // Menu — links point back to the home sections so they work from here.
-      {
-        _key: key(),
-        _type: 'navbarBlock',
-        logo: 'H.Studio',
-        ctaLabel: "Let's talk",
-        theme: 'onLight', // black text over the light Projects Hero
-        navLinks: [
-          { _key: key(), label: 'About', href: '/#about' },
-          { _key: key(), label: 'Services', href: '/#services' },
-          { _key: key(), label: 'Projects', href: '/projects' },
-          { _key: key(), label: 'News', href: '/#news' },
-          { _key: key(), label: 'Contact', href: '#contact' },
-        ],
-      },
+      // (Menu + Footer are global — see Site Settings.)
       // Projects Hero (the new cover)
       {
         _key: key(),
@@ -62,27 +49,7 @@ async function run() {
         intro:
           "Have a project that deserves the same care? Tell me what you're making and where you want it to go.",
         ctaLabel: 'Start a project',
-        ctaHref: '#contact',
-      },
-      // Footer
-      {
-        _key: key(),
-        _type: 'footerBlock',
-        ctaText: 'Have a project in mind?',
-        ctaButtonLabel: "Let's talk",
-        ctaButtonHref: 'mailto:hello@h.studio',
-        socials: [
-          { _key: key(), label: 'Facebook', href: 'https://facebook.com/h.studio' },
-          { _key: key(), label: 'Instagram', href: 'https://instagram.com/h.studio' },
-          { _key: key(), label: 'x.com', href: 'https://x.com/h_studio' },
-          { _key: key(), label: 'Linkedin', href: 'https://linkedin.com/company/h-studio' },
-        ],
-        legal: [
-          { _key: key(), label: 'Licences', href: '#' },
-          { _key: key(), label: 'Privacy policy', href: '#' },
-        ],
-        wordmark: 'H.Studio',
-        credit: '[ Coded By Claude ]',
+        ctaHref: '/contact',
       },
     ],
   })
